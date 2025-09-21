@@ -14,10 +14,10 @@ import lombok.*;
 public abstract class Profile {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private int id;
     private String name;
-    @OneToOne()
+    @OneToOne
     @JoinColumn(name = "userId")
     private PJUser user;
 

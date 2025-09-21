@@ -20,7 +20,7 @@ public class Skill {
     @Column(unique = true)
     private String skillName ;
 
-    @ManyToMany(mappedBy = "skillsRequired")
+    @ManyToMany(mappedBy = "skillsRequired",cascade = CascadeType.PERSIST)
     @JsonIgnore
     private List<Business> profiles;
 }

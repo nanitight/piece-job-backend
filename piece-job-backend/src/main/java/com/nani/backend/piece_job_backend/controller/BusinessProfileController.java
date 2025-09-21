@@ -5,8 +5,10 @@ import com.nani.backend.piece_job_backend.model.PJUser;
 import com.nani.backend.piece_job_backend.model.Profile;
 import com.nani.backend.piece_job_backend.model.Skill;
 import com.nani.backend.piece_job_backend.service.BusinessProfileService;
+import com.nani.backend.piece_job_backend.service.JwtService;
 import com.nani.backend.piece_job_backend.service.PJUserDetailsService;
 import com.nani.backend.piece_job_backend.service.PJUserService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.apache.catalina.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,8 +23,12 @@ public class BusinessProfileController {
 
     private BusinessProfileService service;
     private PJUserService userDetailsService;
-    public BusinessProfileController(BusinessProfileService service, PJUserService userDetailsService) {
+    private JwtService jwtService;
+    public BusinessProfileController(BusinessProfileService service,
+                                     PJUserService userDetailsService,
+                                     JwtService jwtService) {
         this.service = service;
+        this.jwtService = jwtService;
         this.userDetailsService = userDetailsService;
     }
 
@@ -42,7 +48,7 @@ public class BusinessProfileController {
     }
 
     @PostMapping("/newprofile")
-    public ResponseEntity<Business> saveBusinessProfile(@RequestBody Business business) {
+    public ResponseEntity<Business> saveBusinessProfile(HttpServletRequest request, @RequestBody Business business) {
         if  (business == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -61,10 +67,16 @@ public class BusinessProfileController {
 //                }
 //            }
 //        }
-        System.out.println(business);
-        PJUser user  = userDetailsService.getUserByUsername("b") ;
-        business.setUser(user);
-        return  new ResponseEntity<>(service.saveBusinessProfile(business) , HttpStatus.OK);
+        try {
+            String tokenUserName = jwtService.getTokenFromRequest(request) ;
+            PJUser user  = userDetailsService.getUserByUsername(tokenUserName) ;
+            business.setUser(user);
+            System.out.println(business);
+            return  new ResponseEntity<>(service.saveBusinessProfile(business) , HttpStatus.OK);
+        }
+        catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
 
     }
 }
