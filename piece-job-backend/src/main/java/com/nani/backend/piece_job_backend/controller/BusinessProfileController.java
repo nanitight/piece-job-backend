@@ -4,6 +4,7 @@ import com.nani.backend.piece_job_backend.model.Business;
 import com.nani.backend.piece_job_backend.model.PJUser;
 import com.nani.backend.piece_job_backend.model.Profile;
 import com.nani.backend.piece_job_backend.model.Skill;
+import com.nani.backend.piece_job_backend.repository.SkillRepo;
 import com.nani.backend.piece_job_backend.service.BusinessProfileService;
 import com.nani.backend.piece_job_backend.service.JwtService;
 import com.nani.backend.piece_job_backend.service.PJUserDetailsService;
@@ -24,13 +25,15 @@ public class BusinessProfileController {
     private BusinessProfileService service;
     private PJUserService userDetailsService;
     private JwtService jwtService;
+
+
     public BusinessProfileController(BusinessProfileService service,
-                                     PJUserService userDetailsService,
-                                     JwtService jwtService) {
+            PJUserService userDetailsService, JwtService jwtService) {
         this.service = service;
-        this.jwtService = jwtService;
         this.userDetailsService = userDetailsService;
+        this.jwtService = jwtService;
     }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<Business> getBusinessProfile(@PathVariable String id) {
@@ -49,34 +52,24 @@ public class BusinessProfileController {
 
     @PostMapping("/newprofile")
     public ResponseEntity<Business> saveBusinessProfile(HttpServletRequest request, @RequestBody Business business) {
-        if  (business == null) {
+        if (business == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        //add null check  on logged in user
         if (business.getSkillsRequired() == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-//        else if(business.getSkillsRequired().size() > 0) {
-//            for(Skill skill : business.getSkillsRequired()) {
-//                if (skill.getProfile() != null)
-//                    skill.getProfile().add(business);
-//                else {
-//                    List<Profile> user = new ArrayList<Profile>() ;
-//                    user.add(business);
-//                    skill.setProfile(user);
-//                }
-//            }
-//        }
+        //add null check  on logged in user
         try {
-            String tokenUserName = jwtService.getTokenFromRequest(request) ;
-            PJUser user  = userDetailsService.getUserByUsername(tokenUserName) ;
+            String tokenUserName =  jwtService.extractUsername(jwtService.getTokenFromRequest(request));
+            System.out.println("token: "+ tokenUserName );
+
+            PJUser user = userDetailsService.getUserByUsername(tokenUserName);
             business.setUser(user);
-            System.out.println(business);
-            return  new ResponseEntity<>(service.saveBusinessProfile(business) , HttpStatus.OK);
-        }
-        catch (Exception e) {
+            System.out.println("business: "+ business+ " user"+user);
+            return new ResponseEntity<>(service.saveBusinessProfile(business), HttpStatus.OK);
+        } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
+        }
     }
-}

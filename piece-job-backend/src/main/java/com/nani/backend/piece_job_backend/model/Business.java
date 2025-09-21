@@ -11,7 +11,7 @@ import java.util.List;
 @Getter
 @Entity
 public class Business extends Profile {
-    @ManyToMany(cascade = CascadeType.PERSIST)
+    @ManyToMany
     @JoinTable(name="profile_skills", joinColumns = {@JoinColumn(name="p_id")},
         inverseJoinColumns = {@JoinColumn(name = "skill_id")})
     private List<Skill> skillsRequired ;

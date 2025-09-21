@@ -1,5 +1,6 @@
 package com.nani.backend.piece_job_backend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.nani.backend.piece_job_backend.dto.PJUserDTO;
 import jakarta.persistence.*;
 import lombok.*;
@@ -19,6 +20,7 @@ public abstract class Profile {
     private String name;
     @OneToOne
     @JoinColumn(name = "userId")
+    @JsonIgnore
     private PJUser user;
 
 }
