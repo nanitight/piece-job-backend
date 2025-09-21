@@ -27,6 +27,10 @@ public class PJUserService {
         return repo.save(pjUser);
     }
 
+    public PJUser getUserByUsername(String username){
+        return repo.findByUsername(username);
+    }
+
     public String verifyUser(PJUser pjUser) {
         Authentication authentication =
                 authManger.authenticate( new UsernamePasswordAuthenticationToken(

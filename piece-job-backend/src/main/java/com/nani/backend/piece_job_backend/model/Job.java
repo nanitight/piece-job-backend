@@ -21,6 +21,5 @@ public class Job {
     private Date releaseDate;
 
     @ManyToOne
-    @JoinColumn(name="posted_by")
     private Profile postedBy;
 }

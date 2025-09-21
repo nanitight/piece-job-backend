@@ -1,9 +1,12 @@
 package com.nani.backend.piece_job_backend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -14,11 +17,12 @@ public class Skill {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id ;
+    @Column(unique = true)
     private String skillName ;
 
-    @ManyToOne
-    @JoinColumn(name = "posted_by")
-    private Profile profile;
+    @ManyToMany(mappedBy = "skillsRequired")
+    @JsonIgnore
+    private List<Business> profiles;
 }
 
 

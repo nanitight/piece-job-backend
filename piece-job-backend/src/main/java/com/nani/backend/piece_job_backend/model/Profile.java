@@ -2,11 +2,11 @@ package com.nani.backend.piece_job_backend.model;
 
 import com.nani.backend.piece_job_backend.dto.PJUserDTO;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -17,7 +17,7 @@ public abstract class Profile {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String name;
-    @OneToOne
+    @OneToOne()
     @JoinColumn(name = "userId")
     private PJUser user;
 
