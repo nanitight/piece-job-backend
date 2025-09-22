@@ -6,6 +6,7 @@ import com.nani.backend.piece_job_backend.model.PJUser;
 import com.nani.backend.piece_job_backend.service.responseFactory;
 import com.nani.backend.piece_job_backend.service.PJUserService;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -48,6 +49,11 @@ public class PJUserController {
 
             return responseFactory.response(userRegistering) ;
         }
+        catch (DataIntegrityViolationException e){
+            return new ResponseEntity<DTOResponse<PJUserDTO>>(new DTOResponse<PJUserDTO>(
+                    e.getMessage(),new PJUserDTO(pjUser.getUsername())), HttpStatus.BAD_REQUEST);
+        }
+
         catch (Exception e){
             return responseFactory.errorResponse(e);
         }

@@ -12,4 +12,8 @@ import org.springframework.stereotype.Component;
 public class PJUserDTO {
     private String username;
     private String loggedInToken;
+
+    public PJUserDTO(String username) {
+        this.username = username;
+    }
 }

@@ -29,7 +29,7 @@ public class BusinessProfileController {
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<Business> getBusinessProfile(@PathVariable String id) {
+    public ResponseEntity<DTOResponse<Business>> getBusinessProfile(@PathVariable String id) {
         int idNumber ;
         try {
             idNumber= Integer.parseInt(id);
@@ -39,8 +39,8 @@ public class BusinessProfileController {
         }
         Business business = service.getBusinessProfile(idNumber);
         if (business == null)
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        return ResponseEntity.ok(business);
+            return responseFactory.notFound("business with id "+idNumber+" not found");
+        return ResponseEntity.ok(new DTOResponse<>(business));
     }
 
     @PostMapping("/newprofile")
