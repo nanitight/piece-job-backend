@@ -1,17 +1,22 @@
 package com.nani.backend.piece_job_backend.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id"
+)
 public class Skill {
 
     @Id
@@ -20,9 +25,9 @@ public class Skill {
     @Column(unique = true)
     private String skillName ;
 
-    @ManyToMany(mappedBy = "skillsRequired",cascade = CascadeType.PERSIST)
-    @JsonIgnore
-    private List<Business> profiles;
+    @ManyToMany(mappedBy = "skillsRequired")
+    @JsonIgnoreProperties("skillsRequired")
+    private List<Business> profiles = new ArrayList<>();
 }
 
 
