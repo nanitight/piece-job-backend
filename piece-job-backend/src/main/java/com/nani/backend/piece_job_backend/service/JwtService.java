@@ -1,5 +1,7 @@
 package com.nani.backend.piece_job_backend.service;
 
+import com.nani.backend.piece_job_backend.dto.PJUserDTO;
+import com.nani.backend.piece_job_backend.model.PJUser;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
