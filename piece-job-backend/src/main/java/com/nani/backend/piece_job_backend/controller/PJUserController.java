@@ -2,6 +2,7 @@ package com.nani.backend.piece_job_backend.controller;
 
 import com.nani.backend.piece_job_backend.dto.DTOResponse;
 import com.nani.backend.piece_job_backend.dto.PJUserDTO;
+import com.nani.backend.piece_job_backend.dto.PJUserUpdateDTO;
 import com.nani.backend.piece_job_backend.model.PJUser;
 import com.nani.backend.piece_job_backend.service.responseFactory;
 import com.nani.backend.piece_job_backend.service.PJUserService;
@@ -60,29 +61,30 @@ public class PJUserController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<PJUserDTO> updatePassword(HttpServletRequest request,
-                                        @RequestBody PJUser pjUser) {
+    public ResponseEntity<DTOResponse<PJUserDTO>> updatePassword(HttpServletRequest request,
+                                        @RequestBody PJUserUpdateDTO pjUser) {
         try{
             String token =  service.getJwtService().getTokenFromRequest(request);
-            System.out.println("token: "+ token );
-
-            PJUser user = service.getUserFromToken(token);
-            user.setPassword(pjUser.getPassword());
+            pjUser.setLoggedInToken(token);
+            System.out.println("request: "+ pjUser );
             //expect pjUser with correct Id
-            pjUser = service.updateUser(pjUser);
-            PJUserDTO pjUserDTO = new PJUserDTO(pjUser.getUsername(), token);
-            return new ResponseEntity<>(pjUserDTO, HttpStatus.OK);
+            PJUserDTO updatedPjUser = service.updateUser(pjUser);
+            System.out.println("updated user: "+ updatedPjUser);
+
+            PJUserDTO pjUserDTO = new PJUserDTO(updatedPjUser.getUsername(), token);
+            return new ResponseEntity<>(new DTOResponse<>(pjUserDTO), HttpStatus.OK);
 
         }
         catch (Exception e) {
             System.out.println( "error" + e.getMessage());
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(new DTOResponse<>(e.getMessage()),
+                    HttpStatus.UNAUTHORIZED);
         }
     }
 
     @GetMapping("/users")
-    public ResponseEntity<List<PJUser>> getAllUsers() {
-        return ResponseEntity.ok(service.getAllUser());
+    public ResponseEntity<DTOResponse<List<PJUser>>> getAllUsers() {
+        return ResponseEntity.ok(new DTOResponse<>(service.getAllUser()));
     }
 }
 

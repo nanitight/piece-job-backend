@@ -1,5 +1,6 @@
 package com.nani.backend.piece_job_backend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -21,5 +22,9 @@ public class PJUser {
     public PJUser(String username, String password) {
         this.username = username;
         this.password = password;
+    }
+
+    public PJUser(int id) {
+        this.id = id;
     }
 }
