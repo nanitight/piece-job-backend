@@ -35,7 +35,7 @@ public class BusinessProfileController {
             idNumber= Integer.parseInt(id);
         }
         catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new DTOResponse<>(e.getMessage()),HttpStatus.BAD_REQUEST);
         }
         Business business = service.getBusinessProfile(idNumber);
         if (business == null)
@@ -69,5 +69,48 @@ public class BusinessProfileController {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
+    }
+
+    @PutMapping("/business/{id}")
+    public ResponseEntity<DTOResponse<Business>> updateBusinessProfile(@PathVariable String id,
+                       @RequestBody Business business) {
+        int idNumber ;
+        try {
+            idNumber= Integer.parseInt(id);
+        }
+        catch (Exception e) {
+            return new ResponseEntity<>(new DTOResponse<>(e.getMessage()),HttpStatus.BAD_REQUEST);
+        }
+
+        if (business == null) {
+            return new ResponseEntity<>(new DTOResponse<>("business update cannot be null"),HttpStatus.BAD_REQUEST);
+        }
+        else{
+            try {
+                return  new ResponseEntity<>(
+                        new DTOResponse<>(service.updateBusinessProfile(idNumber,business)),
+                        HttpStatus.OK);
+            } catch (Exception e) {
+                return new ResponseEntity<>(new DTOResponse<>(e.getMessage()),HttpStatus.BAD_REQUEST);
+            }
+        }
+    }
+
+    @DeleteMapping("/business/{id}")
+    public ResponseEntity<DTOResponse<Business>> deleteBusinessProfile(@PathVariable String id) {
+        int idNumber ;
+        try {
+            idNumber= Integer.parseInt(id);
+        }
+        catch (Exception e) {
+            return new ResponseEntity<>(new DTOResponse<>(e.getMessage()),HttpStatus.BAD_REQUEST);
+        }
+        try {
+            return new ResponseEntity<>(new DTOResponse<>(
+                    "deleted business: "+service.deleteBusinessProfile(idNumber)),HttpStatus.OK);
+        }
+        catch (Exception e) {
+            return new ResponseEntity<>(new DTOResponse<>(e.getMessage()),HttpStatus.BAD_REQUEST);
+        }
     }
 }

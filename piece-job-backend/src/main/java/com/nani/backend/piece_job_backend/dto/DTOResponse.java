@@ -13,6 +13,7 @@ public class DTOResponse<T> {
 
     public DTOResponse(String message) {
         this.message = message;
+        System.out.println("DTO MSG: "+message);
     }
 
     public DTOResponse(T data) {
