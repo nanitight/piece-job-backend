@@ -55,4 +55,7 @@ public class BusinessProfileService {
         }
     }
 
+    public Business getBusinessProfileFromUserId(int id) {
+        return repo.getBusinessProfileFromUserId(id) ;
+    }
 }

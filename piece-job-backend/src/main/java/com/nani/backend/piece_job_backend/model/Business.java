@@ -27,13 +27,13 @@ public class Business extends Profile {
         inverseJoinColumns = {@JoinColumn(name = "skill_id")})
     private List<Skill> skillsRequired ;
     @OneToMany(mappedBy = "postedBy")
-    private List<Job> jobsPosted =new ArrayList<>();
+    private List<PieceJob> jobsPosted =new ArrayList<>();
 
     public void updateToNewBusinessObject(Business business) {
-        this.companyName = business.getCompanyName();
-        this.companyAddress = business.getCompanyAddress();
-        this.companyRegisterNumber = business.getCompanyRegisterNumber();
-        this.skillsRequired = business.getSkillsRequired();
-        this.jobsPosted = business.getJobsPosted();
+        this.companyName = business.getCompanyName() != null ? business.getCompanyName() : this.companyName;
+        this.companyAddress = business.getCompanyAddress()  != null ? business.getCompanyAddress() : this.companyAddress;
+        this.companyRegisterNumber = business.getCompanyRegisterNumber()  != null ? business.getCompanyRegisterNumber() : this.companyRegisterNumber;
+        this.skillsRequired = business.getSkillsRequired() != null ? business.getSkillsRequired() : this.skillsRequired;
+        this.jobsPosted = business.getJobsPosted()  != null ? business.getJobsPosted() : this.jobsPosted;
     }
 }

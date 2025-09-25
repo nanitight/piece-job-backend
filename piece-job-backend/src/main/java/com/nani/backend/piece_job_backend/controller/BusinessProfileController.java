@@ -72,15 +72,8 @@ public class BusinessProfileController {
     }
 
     @PutMapping("/business/{id}")
-    public ResponseEntity<DTOResponse<Business>> updateBusinessProfile(@PathVariable String id,
+    public ResponseEntity<DTOResponse<Business>> updateBusinessProfile(@PathVariable int id,
                        @RequestBody Business business) {
-        int idNumber ;
-        try {
-            idNumber= Integer.parseInt(id);
-        }
-        catch (Exception e) {
-            return new ResponseEntity<>(new DTOResponse<>(e.getMessage()),HttpStatus.BAD_REQUEST);
-        }
 
         if (business == null) {
             return new ResponseEntity<>(new DTOResponse<>("business update cannot be null"),HttpStatus.BAD_REQUEST);
@@ -88,7 +81,7 @@ public class BusinessProfileController {
         else{
             try {
                 return  new ResponseEntity<>(
-                        new DTOResponse<>(service.updateBusinessProfile(idNumber,business)),
+                        new DTOResponse<>(service.updateBusinessProfile(id,business)),
                         HttpStatus.OK);
             } catch (Exception e) {
                 return new ResponseEntity<>(new DTOResponse<>(e.getMessage()),HttpStatus.BAD_REQUEST);
@@ -97,17 +90,10 @@ public class BusinessProfileController {
     }
 
     @DeleteMapping("/business/{id}")
-    public ResponseEntity<DTOResponse<Business>> deleteBusinessProfile(@PathVariable String id) {
-        int idNumber ;
-        try {
-            idNumber= Integer.parseInt(id);
-        }
-        catch (Exception e) {
-            return new ResponseEntity<>(new DTOResponse<>(e.getMessage()),HttpStatus.BAD_REQUEST);
-        }
+    public ResponseEntity<DTOResponse<Business>> deleteBusinessProfile(@PathVariable int id) {
         try {
             return new ResponseEntity<>(new DTOResponse<>(
-                    "deleted business: "+service.deleteBusinessProfile(idNumber)),HttpStatus.OK);
+                    "deleted business: "+service.deleteBusinessProfile(id)),HttpStatus.OK);
         }
         catch (Exception e) {
             return new ResponseEntity<>(new DTOResponse<>(e.getMessage()),HttpStatus.BAD_REQUEST);

@@ -2,6 +2,7 @@ package com.nani.backend.piece_job_backend.service;
 
 import com.nani.backend.piece_job_backend.dto.PJUserDTO;
 import com.nani.backend.piece_job_backend.dto.PJUserUpdateDTO;
+import com.nani.backend.piece_job_backend.model.Business;
 import com.nani.backend.piece_job_backend.model.PJUser;
 import com.nani.backend.piece_job_backend.repository.PJUserRepo;
 import lombok.Getter;
@@ -19,6 +20,7 @@ public class PJUserService {
     private AuthenticationManager authManger;
     @Getter
     private JwtService jwtService;
+
     private BCryptPasswordEncoder encoder =  new BCryptPasswordEncoder(10);
 
     public PJUserService(PJUserRepo repo,AuthenticationManager  authManger,JwtService jwtService){

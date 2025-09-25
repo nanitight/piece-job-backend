@@ -26,8 +26,42 @@ public class Skill {
     private String skillName ;
 
     @ManyToMany(mappedBy = "skillsRequired")
-    @JsonIgnoreProperties("skillsRequired")
+    @JsonIgnore
     private List<Business> profiles = new ArrayList<>();
+
+    @ManyToMany(mappedBy = "skills")
+    @JsonIgnore
+    private List<PieceJob> jobsListed ;
+
+    public void addBusinessProfileToSkill(Business business) {
+        if (business == null) {
+            System.out.println("adding NULL business profile to skill");
+            return;
+        }
+
+        if (profiles != null) {
+            boolean found = profiles.stream().anyMatch(p -> p.getId() == business.getId());
+            if (!found)
+                profiles.add(business);
+        }
+        else {
+            profiles = new ArrayList<Business>();;
+            profiles.add(business);
+        }
+
+    }
+
+    public void addJobListingToSkill(PieceJob job) {
+        if (jobsListed != null){
+            boolean found = jobsListed.stream().anyMatch(j -> j.getId() == job.getId());
+            if (!found)
+                jobsListed.add(job);
+        }
+        else {
+            jobsListed = new ArrayList<>();
+            jobsListed.add(job);
+        }
+    }
 }
 
 
