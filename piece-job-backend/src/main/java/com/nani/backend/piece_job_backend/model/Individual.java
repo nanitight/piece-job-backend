@@ -1,22 +1,38 @@
 package com.nani.backend.piece_job_backend.model;
 
 
-import jakarta.persistence.OneToMany;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import jakarta.persistence.*;
+import lombok.*;
 
 import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
-//@Entity
-public class Individual extends Profile{
+@Entity
+@Setter
+@Getter
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id"
+)
+public abstract class Individual extends Profile{
 
-    @OneToMany(mappedBy = "profile")
+    @ManyToMany
+    @JoinTable(name = "individuals_skills_set",
+            joinColumns = { @JoinColumn(name = "ind_id")},
+            inverseJoinColumns = {@JoinColumn(name = "skill_id")})
     private List<Skill> skillSet ;
-    @OneToMany(mappedBy = "id")
+    @ManyToMany
+    @JoinTable(name = "jobs_accepted_by_individual",
+            joinColumns = { @JoinColumn(name = "ind_id")},
+            inverseJoinColumns = {@JoinColumn(name = "job_id")})
     private List<PieceJob> jobsAccepted ;
-    @OneToMany(mappedBy = "id")
+    @ManyToMany
+    @JoinTable(name = "jobs_completed_by_individual",
+            joinColumns = { @JoinColumn(name = "ind_id")},
+            inverseJoinColumns = {@JoinColumn(name = "job_id")})
     private List<PieceJob> jobsCompleted ;
 }
 

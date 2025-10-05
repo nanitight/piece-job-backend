@@ -1,6 +1,7 @@
 package com.nani.backend.piece_job_backend.service;
 
 import com.nani.backend.piece_job_backend.model.Business;
+import com.nani.backend.piece_job_backend.model.Individual;
 import com.nani.backend.piece_job_backend.model.PieceJob;
 import com.nani.backend.piece_job_backend.model.Skill;
 import com.nani.backend.piece_job_backend.repository.SkillRepo;
@@ -32,6 +33,23 @@ public class SkillService {
 //                    .orElseGet(() -> skillRepo.save(skill) );
 
             exists.addBusinessProfileToSkill(business);
+            skills.add(exists);
+        }
+        return skills;
+    }
+
+    public List<Skill> getAndSaveSkillsFromIndividual(Individual individual) {
+        List<Skill> skills = new ArrayList<>();
+
+        for (Skill skill : individual.getSkillSet()) {
+            Skill exists = repo.findSkillBySkillName(skill.getSkillName()) ;
+            if (exists == null) {
+                exists = repo.save(skill) ;
+                System.out.println("skill not found from db...");
+            }
+//                    .orElseGet(() -> skillRepo.save(skill) );
+
+            exists.addIndividualProfileToSkill(individual);
             skills.add(exists);
         }
         return skills;

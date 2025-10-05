@@ -24,7 +24,7 @@ public class Business extends Profile {
     private String companyRegisterNumber;
 
     @ManyToMany
-    @JoinTable(name="profile_skills", joinColumns = {@JoinColumn(name="p_id")},
+    @JoinTable(name="business_required_skills", joinColumns = {@JoinColumn(name="p_id")},
         inverseJoinColumns = {@JoinColumn(name = "skill_id")})
     private List<Skill> skillsRequired ;
     @OneToMany(mappedBy = "postedBy")

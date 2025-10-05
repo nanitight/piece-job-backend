@@ -1,6 +1,7 @@
 package com.nani.backend.piece_job_backend.model;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -35,6 +36,7 @@ public class PieceJob {
     inverseJoinColumns = {@JoinColumn(name = "skill_id")})
     private List<Skill> skills;
     @ManyToOne
+    @JsonIgnore
     private Business postedBy;
 
     public void updateToNewPieceJobInformation(PieceJob job) {

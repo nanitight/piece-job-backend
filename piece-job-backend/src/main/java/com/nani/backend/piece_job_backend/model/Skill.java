@@ -33,6 +33,10 @@ public class Skill {
     @JsonIgnore
     private List<PieceJob> jobsListed ;
 
+    @ManyToMany(mappedBy = "skillSet")
+    @JsonIgnore
+    private List<Individual> possessedBy;
+
     public void addBusinessProfileToSkill(Business business) {
         if (business == null) {
             System.out.println("adding NULL business profile to skill");
@@ -47,6 +51,24 @@ public class Skill {
         else {
             profiles = new ArrayList<Business>();;
             profiles.add(business);
+        }
+
+    }
+
+    public void addIndividualProfileToSkill(Individual individual) {
+        if (individual == null) {
+            System.out.println("adding NULL individual profile to skill");
+            return;
+        }
+
+        if (possessedBy != null) {
+            boolean found = possessedBy.stream().anyMatch(p -> p.getId() == individual.getId());
+            if (!found)
+                possessedBy.add(individual);
+        }
+        else {
+            possessedBy = new ArrayList<Individual>();;
+            possessedBy.add(individual);
         }
 
     }
