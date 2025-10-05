@@ -58,4 +58,8 @@ public class SkillService {
         return skills;
     }
 
+    public List<Skill> getSkillFromNamePattern(String skillName){
+
+        return repo.findSkillThatHasPattern(skillName) ;
+    }
 }
