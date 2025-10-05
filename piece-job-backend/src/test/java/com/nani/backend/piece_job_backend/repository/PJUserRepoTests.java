@@ -99,7 +99,7 @@ public class PJUserRepoTests {
         repo.delete(user1);
         Optional<PJUser> userReturned = repo.findById(user1.getId()) ;
 
-        Assertions.assertThat(userReturned).isEmpty();
+        Assertions.assertThat(userReturned).isEmpty() ;
 
     }
 
