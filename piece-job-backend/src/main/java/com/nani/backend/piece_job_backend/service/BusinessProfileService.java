@@ -1,5 +1,6 @@
 package com.nani.backend.piece_job_backend.service;
 
+import com.nani.backend.piece_job_backend.dto.DTOResponse;
 import com.nani.backend.piece_job_backend.model.Business;
 import com.nani.backend.piece_job_backend.model.Skill;
 import com.nani.backend.piece_job_backend.repository.BusinessProfileRepo;
@@ -58,4 +59,9 @@ public class BusinessProfileService {
     public Business getBusinessProfileFromUserId(int id) {
         return repo.getBusinessProfileFromUserId(id) ;
     }
+
+    public List<Business> getAllBusinesses() {
+        return repo.findAll();
+    }
+
 }

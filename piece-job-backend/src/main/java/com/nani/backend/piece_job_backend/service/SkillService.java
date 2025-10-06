@@ -1,5 +1,7 @@
 package com.nani.backend.piece_job_backend.service;
 
+import com.nani.backend.piece_job_backend.dto.SkillPossessedByIndividualDTO;
+import com.nani.backend.piece_job_backend.dto.SkillRequiredByBusinessDTO;
 import com.nani.backend.piece_job_backend.model.Business;
 import com.nani.backend.piece_job_backend.model.Individual;
 import com.nani.backend.piece_job_backend.model.PieceJob;
@@ -79,5 +81,21 @@ public class SkillService {
     public List<Skill> getSkillFromNamePattern(String skillName){
 
         return repo.findSkillThatHasPattern(skillName) ;
+    }
+
+    public List<SkillRequiredByBusinessDTO> getSkillsRequiredByBusiness() {
+        List<SkillRequiredByBusinessDTO> skills = new ArrayList<>();
+        for (Skill skill : getSkills()){
+            skills.add(new SkillRequiredByBusinessDTO(skill));
+        }
+        return skills;
+    }
+
+    public List<SkillPossessedByIndividualDTO> getSkillsPossessedByIndividual(){
+        List<SkillPossessedByIndividualDTO> skills = new ArrayList<>();
+        for (Skill skill : getSkills()){
+            skills.add(new SkillPossessedByIndividualDTO(skill));
+        }
+        return skills;
     }
 }

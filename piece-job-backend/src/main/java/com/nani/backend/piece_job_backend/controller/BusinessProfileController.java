@@ -13,6 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @RestController//("/api/business")
 public class BusinessProfileController {
@@ -27,6 +29,11 @@ public class BusinessProfileController {
         this.userDetailsService = userDetailsService;
     }
 
+
+    @GetMapping("/business")
+    public ResponseEntity<DTOResponse<List<Business>>> getAllBusinessProfiles(){
+        return ResponseEntity.ok().body(new DTOResponse<List<Business>>(service.getAllBusinesses()));
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<DTOResponse<Business>> getBusinessProfile(@PathVariable String id) {

@@ -1,6 +1,7 @@
 package com.nani.backend.piece_job_backend.controller;
 
 import com.nani.backend.piece_job_backend.dto.DTOResponse;
+import com.nani.backend.piece_job_backend.dto.PieceJobDTO;
 import com.nani.backend.piece_job_backend.model.Business;
 import com.nani.backend.piece_job_backend.model.PJUser;
 import com.nani.backend.piece_job_backend.model.PieceJob;
@@ -35,10 +36,10 @@ public class PieceJobController {
     }
 
     @RequestMapping("/jobs/{id}")
-    public ResponseEntity<PieceJob> getJobById(@PathVariable int id) {
+    public ResponseEntity<PieceJobDTO> getJobById(@PathVariable int id) {
         PieceJob job = jobService.getJobById(id);
         if (job != null)
-            return new ResponseEntity<>(job,HttpStatus.OK);
+            return new ResponseEntity<>(new PieceJobDTO(job),HttpStatus.OK);
         else
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
@@ -48,8 +49,10 @@ public class PieceJobController {
     public ResponseEntity<DTOResponse<PieceJob>> addJob(HttpServletRequest request, @RequestBody PieceJob job){
         try {
             Business business = getBusinessFromRequestToken(request);
-            job.setPostedBy(business);
             System.out.println("business: "+ business  + " job: "+ job);
+            if (business == null)
+                return responseFactory.errorResponse("Only a Business can post a job",HttpStatus.FORBIDDEN) ;
+            job.setPostedBy(business);
             return ResponseEntity.ok(new DTOResponse<>(jobService.addJob(job)));
         }
         catch (DataAccessException | SecurityException e){
@@ -74,8 +77,14 @@ public class PieceJobController {
             @PathVariable int id,@RequestBody PieceJob job){
         try {
             Business business = getBusinessFromRequestToken(request);
+            if (business == null)
+                return responseFactory.errorResponse("Only a Business can update a job",HttpStatus.FORBIDDEN) ;
             if (job.getPostedBy() == null)
                 job.setPostedBy(business);
+            if (business.getId() != job.getPostedBy().getId()){
+                    return responseFactory.errorResponse(
+                            "Only a Business that posted the job can update a job",HttpStatus.FORBIDDEN) ;
+            }
             return new ResponseEntity<>(new DTOResponse<>(jobService.updateAJob(id,job)), HttpStatus.OK);
         }
         catch (Exception e){

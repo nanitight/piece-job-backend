@@ -20,4 +20,8 @@ public class SeekerProfileService {
         System.out.println("seeker: "+ seeker+ " skills"+skills);
         return repo.save(seeker) ;
     }
+
+    public List<Seeker> getAllIndividuals() {
+        return repo.findAll() ;
+    }
 }
