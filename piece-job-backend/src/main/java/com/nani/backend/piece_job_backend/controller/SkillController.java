@@ -31,7 +31,7 @@ public class SkillController {
 
     @GetMapping("/skills/search")
     public ResponseEntity<DTOResponse<List<Skill>>> searchSkills(
-            @RequestParam String keyword
+            @RequestParam("keyword") String keyword
     ){
         return ResponseEntity.status(HttpStatus.OK).body(
                 new DTOResponse<>(service.getSkillFromNamePattern(keyword))

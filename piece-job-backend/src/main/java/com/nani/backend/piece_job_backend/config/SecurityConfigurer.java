@@ -42,6 +42,7 @@ public class SecurityConfigurer {
 //                .oauth2Login((login)->
 //                        login.redirectionEndpoint((endpoint)->
 //                                endpoint.baseUri("localhost:3000/")))
+                .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
 
                 .build();

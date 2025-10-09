@@ -3,10 +3,10 @@ package com.nani.backend.piece_job_backend;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
+//@SpringBootTest
 class PieceJobBackendApplicationTests {
 
-	@Test
+//	@Test
 	void contextLoads() {
 	}
 

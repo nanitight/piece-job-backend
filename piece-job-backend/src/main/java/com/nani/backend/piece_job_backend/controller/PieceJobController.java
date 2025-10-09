@@ -37,7 +37,7 @@ public class PieceJobController {
     }
 
     @RequestMapping("/jobs/{id}")
-    public ResponseEntity<PieceJobDTO> getJobById(@PathVariable int id) {
+    public ResponseEntity<PieceJobDTO> getJobById(@PathVariable("id") int id) {
         PieceJob job = jobService.getJobById(id);
         if (job != null)
             return new ResponseEntity<>(new PieceJobDTO(job),HttpStatus.OK);
@@ -75,7 +75,7 @@ public class PieceJobController {
 
     @PutMapping("/jobs/{id}")
     public ResponseEntity<DTOResponse<PieceJob>> updateAJob(HttpServletRequest request,
-            @PathVariable int id,@RequestBody PieceJob job){
+            @PathVariable("id") int id,@RequestBody PieceJob job){
         try {
             Business business = getBusinessFromRequestToken(request);
             if (business == null)
@@ -94,7 +94,7 @@ public class PieceJobController {
     }
 
     @DeleteMapping("/jobs/{id}")
-    public void deleteJobById(@PathVariable int id){
+    public void deleteJobById(@PathVariable("id") int id){
         jobService.deleteAJob(id) ;
     }
 }

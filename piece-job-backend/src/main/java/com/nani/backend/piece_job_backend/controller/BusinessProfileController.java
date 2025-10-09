@@ -37,7 +37,7 @@ public class BusinessProfileController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<DTOResponse<Business>> getBusinessProfile(@PathVariable String id) {
+    public ResponseEntity<DTOResponse<Business>> getBusinessProfile(@PathVariable("id") String id) {
         int idNumber ;
         try {
             idNumber= Integer.parseInt(id);
@@ -81,7 +81,7 @@ public class BusinessProfileController {
     }
 
     @PutMapping("/business/{id}")
-    public ResponseEntity<DTOResponse<Business>> updateBusinessProfile(@PathVariable int id,
+    public ResponseEntity<DTOResponse<Business>> updateBusinessProfile(@PathVariable("id") int id,
                        @RequestBody Business business) {
 
         if (business == null) {
@@ -99,7 +99,7 @@ public class BusinessProfileController {
     }
 
     @DeleteMapping("/business/{id}")
-    public ResponseEntity<DTOResponse<Business>> deleteBusinessProfile(@PathVariable int id) {
+    public ResponseEntity<DTOResponse<Business>> deleteBusinessProfile(@PathVariable("id") int id) {
         try {
             return new ResponseEntity<>(new DTOResponse<>(
                     "deleted business: "+service.deleteBusinessProfile(id)),HttpStatus.OK);
