@@ -19,10 +19,15 @@ public class PJUser {
     @Column(unique = true)
     private String username;
     private String password;
+    private String role ;
+    private String employerType;
 
     public PJUser(String username, String password) {
         this.username = username;
         this.password = password;
+        role = "jobSeeker" ;
+        employerType = "individual" ;
+
     }
 
     public PJUser(int id) {

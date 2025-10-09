@@ -17,6 +17,7 @@ import java.util.List;
 
 
 @RestController//("/api/business")
+@CrossOrigin
 public class BusinessProfileController {
 
     private BusinessProfileService service;
@@ -51,7 +52,8 @@ public class BusinessProfileController {
     }
 
     @PostMapping("/newprofile")
-    public ResponseEntity<DTOResponse<Business>> saveBusinessProfile(HttpServletRequest request, @RequestBody Business business) {
+    public ResponseEntity<DTOResponse<Business>> saveBusinessProfile(HttpServletRequest request,
+                        @RequestBody Business business) {
         if (business == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }

@@ -37,4 +37,11 @@ public class Business extends Profile {
         this.skillsRequired = business.getSkillsRequired() != null ? business.getSkillsRequired() : this.skillsRequired;
         this.jobsPosted = business.getJobsPosted()  != null ? business.getJobsPosted() : this.jobsPosted;
     }
+
+    @Override
+    public void setUser(PJUser user){
+        this.user = user ;
+        this.user.setEmployerType("business");
+        this.user.setRole("employer");
+    }
 }

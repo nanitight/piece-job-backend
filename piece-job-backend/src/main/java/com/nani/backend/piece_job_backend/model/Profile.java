@@ -25,6 +25,12 @@ public abstract class Profile {
     @OneToOne
     @JoinColumn(name = "userId")
     @JsonIgnore
-    private PJUser user;
+    protected PJUser user;
+
+    public void setUser(PJUser user){
+        this.user = user ;
+        this.user.setEmployerType("individual");
+        this.user.setRole("jobSeeker");
+    }
 
 }
