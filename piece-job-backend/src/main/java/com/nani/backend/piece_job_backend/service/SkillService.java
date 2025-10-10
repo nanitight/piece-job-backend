@@ -1,5 +1,6 @@
 package com.nani.backend.piece_job_backend.service;
 
+import com.nani.backend.piece_job_backend.dto.SkillInJobsDTO;
 import com.nani.backend.piece_job_backend.dto.SkillPossessedByIndividualDTO;
 import com.nani.backend.piece_job_backend.dto.SkillRequiredByBusinessDTO;
 import com.nani.backend.piece_job_backend.model.Business;
@@ -95,6 +96,14 @@ public class SkillService {
         List<SkillPossessedByIndividualDTO> skills = new ArrayList<>();
         for (Skill skill : getSkills()){
             skills.add(new SkillPossessedByIndividualDTO(skill));
+        }
+        return skills;
+    }
+
+    public List<SkillInJobsDTO> getSkillsAndTheirJobListing() {
+        List<SkillInJobsDTO> skills = new ArrayList<>();
+        for (Skill skill : getSkills()){
+            skills.add(new SkillInJobsDTO(skill));
         }
         return skills;
     }

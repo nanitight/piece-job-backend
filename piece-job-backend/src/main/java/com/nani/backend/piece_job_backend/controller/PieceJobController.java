@@ -61,7 +61,7 @@ public class PieceJobController {
         }
         catch (Exception e) {
             System.out.println("error: \n"+e.getClass().getName()+"\n"+ e.getMessage());
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            return responseFactory.errorResponse(e);
         }
     }
 

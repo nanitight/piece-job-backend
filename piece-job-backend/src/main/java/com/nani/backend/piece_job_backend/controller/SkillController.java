@@ -1,6 +1,7 @@
 package com.nani.backend.piece_job_backend.controller;
 
 import com.nani.backend.piece_job_backend.dto.DTOResponse;
+import com.nani.backend.piece_job_backend.dto.SkillInJobsDTO;
 import com.nani.backend.piece_job_backend.dto.SkillPossessedByIndividualDTO;
 import com.nani.backend.piece_job_backend.dto.SkillRequiredByBusinessDTO;
 import com.nani.backend.piece_job_backend.model.Skill;
@@ -49,6 +50,13 @@ public class SkillController {
     public ResponseEntity<DTOResponse<List<SkillPossessedByIndividualDTO>>> getSkillsPossessed(){
         return ResponseEntity.status(HttpStatus.OK).body(
                 new DTOResponse<>(service.getSkillsPossessedByIndividual())
+        );
+    }
+
+    @GetMapping("/skillinjobs")
+    public ResponseEntity <DTOResponse<List<SkillInJobsDTO>>> skillsAndJobsItAppearsIn(){
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new DTOResponse<>(service.getSkillsAndTheirJobListing())
         );
     }
 
