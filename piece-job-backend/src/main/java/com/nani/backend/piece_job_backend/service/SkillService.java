@@ -8,6 +8,7 @@ import com.nani.backend.piece_job_backend.model.Individual;
 import com.nani.backend.piece_job_backend.model.PieceJob;
 import com.nani.backend.piece_job_backend.model.Skill;
 import com.nani.backend.piece_job_backend.repository.SkillRepo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ import java.util.List;
 @Service
 public class SkillService {
     private SkillRepo repo ;
+    @Autowired
     public SkillService(SkillRepo repo){
         this.repo = repo;
     }

@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -41,6 +42,9 @@ public class PieceJob {
     @JsonIgnore
     private Business postedBy;
 
+    @ManyToMany(mappedBy = "jobsApplied")
+    private List<Individual> jobApplicants ;
+
     public void updateToNewPieceJobInformation(PieceJob job) {
         this.title = job.getTitle() == null ? title : job.getTitle();
         this.description = job.getDescription() == null ? description : job.getDescription();
@@ -51,5 +55,24 @@ public class PieceJob {
         this.specialRequirement = job.getSpecialRequirement() == null ? specialRequirement : job.getSpecialRequirement();
         this.skills = job.getSkills() == null ? skills : job.getSkills();
         this.postedBy = job.getPostedBy() == null ? postedBy : job.getPostedBy();
+    }
+
+    public boolean applyForJob(Individual applicant){
+        if (applicant == null)
+            return false ;
+
+        if (jobApplicants == null|| jobApplicants.isEmpty()){
+            jobApplicants = new ArrayList<>();
+            jobApplicants.add(applicant) ;
+            return true ;
+        }
+
+        boolean alreadyApplied = jobApplicants.stream().anyMatch(i->
+                i.getId() == applicant.getId());
+        if(alreadyApplied)
+            return false ;
+        jobApplicants.add(applicant) ;
+//        applicant.applied(this);
+        return true;
     }
 }

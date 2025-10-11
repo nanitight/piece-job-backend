@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.Entity;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 @AllArgsConstructor
 @Setter
@@ -13,6 +14,7 @@ import lombok.*;
         generator = ObjectIdGenerators.PropertyGenerator.class,
         property = "id"
 )
+@SuperBuilder
 public class Seeker extends Individual {
     //has a business. If they want to Post Jobs as well.
     @Override

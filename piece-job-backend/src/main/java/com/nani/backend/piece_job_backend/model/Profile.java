@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.nani.backend.piece_job_backend.dto.PJUserDTO;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 @Data
 @Getter
@@ -12,6 +13,7 @@ import lombok.*;
 @AllArgsConstructor
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
+@SuperBuilder
 public abstract class Profile {
 
     @Id

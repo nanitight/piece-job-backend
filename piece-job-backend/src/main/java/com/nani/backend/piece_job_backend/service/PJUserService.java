@@ -94,8 +94,13 @@ public class PJUserService {
             }
             updatedPassword = encoder.encode(pjUser.getNewPassword());
         }
+        if (!pjUser.getRole().isEmpty())
+            oldPjUser.setRole(pjUser.getRole());
+        if (!pjUser.getEmployerType().isEmpty())
+            oldPjUser.setEmployerType(pjUser.getEmployerType());
 
         if (updatedPassword == null && updatedUsername == null){
+            repo.save(oldPjUser);
             return new PJUserDTO(oldPjUser.getUsername(),pjUser.getLoggedInToken());
         }
         else if (updatedUsername != null && updatedPassword == null){

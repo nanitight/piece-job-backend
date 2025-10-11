@@ -21,18 +21,18 @@ public class PieceJobDTO {
     private List<SkillDTO> skills;
     private BusinessDTO postedBy;
 
-    public PieceJobDTO(PieceJob realBusiness){
-        this.id = realBusiness.getId() ;
-        this.title = realBusiness.getTitle();
-        this.description = realBusiness.getDescription();
-        this.location = realBusiness.getLocation();
-        this.payRate = realBusiness.getPayRate();
-        this.releaseDate = realBusiness.getReleaseDate();
-        this.expectedEndDate = realBusiness.getExpectedEndDate();
-        this.specialRequirement = realBusiness.getSpecialRequirement();
-        this.postedBy = new BusinessDTO(realBusiness.getPostedBy()) ;
+    public PieceJobDTO(PieceJob job){
+        this.id = job.getId() ;
+        this.title = job.getTitle();
+        this.description = job.getDescription();
+        this.location = job.getLocation();
+        this.payRate = job.getPayRate();
+        this.releaseDate = job.getReleaseDate();
+        this.expectedEndDate = job.getExpectedEndDate();
+        this.specialRequirement = job.getSpecialRequirement();
+        this.postedBy = new BusinessDTO(job.getPostedBy()) ;
         List<SkillDTO> skillDTOS = new ArrayList<>() ;
-        for(Skill skill: realBusiness.getSkills() ){
+        for(Skill skill: job.getSkills() ){
             skillDTOS.add(new SkillDTO(skill));
         }
         this.skills = skillDTOS ;

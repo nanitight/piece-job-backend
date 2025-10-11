@@ -38,8 +38,8 @@ public class PJUserController {
 
     @PostMapping("/register")
     public ResponseEntity<DTOResponse<PJUserDTO>> register(@RequestBody PJUser pjUser) {
-        if (pjUser.getPassword() == null)
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        if (pjUser.getPassword() == null || pjUser.getPassword().isEmpty())
+            return new ResponseEntity<>(new DTOResponse<>("password field is required"), HttpStatus.BAD_REQUEST);
         if (pjUser.getRole() == null || pjUser.getRole().isEmpty() ||
                 pjUser.getEmployerType() == null || pjUser.getEmployerType().isEmpty()){
 //            return responseFactory.errorResponse("User Role needs to be set to jobSeeker or employer",HttpStatus.BAD_REQUEST) ;

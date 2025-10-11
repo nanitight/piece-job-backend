@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.util.List;
 
@@ -17,6 +18,7 @@ import java.util.List;
         generator = ObjectIdGenerators.PropertyGenerator.class,
         property = "id"
 )
+@SuperBuilder
 public abstract class Individual extends Profile{
 
     @ManyToMany
@@ -25,10 +27,10 @@ public abstract class Individual extends Profile{
             inverseJoinColumns = {@JoinColumn(name = "skill_id")})
     private List<Skill> skillSet ;
     @ManyToMany
-    @JoinTable(name = "jobs_accepted_by_individual",
+    @JoinTable(name = "jobs_applied_by_individual",
             joinColumns = { @JoinColumn(name = "ind_id")},
             inverseJoinColumns = {@JoinColumn(name = "job_id")})
-    private List<PieceJob> jobsAccepted ;
+    private List<PieceJob> jobsApplied;
     @ManyToMany
     @JoinTable(name = "jobs_completed_by_individual",
             joinColumns = { @JoinColumn(name = "ind_id")},
