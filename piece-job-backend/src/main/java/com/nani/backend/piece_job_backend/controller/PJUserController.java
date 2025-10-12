@@ -28,7 +28,7 @@ public class PJUserController {
         System.out.println("User "+pjUser);
         try{
             String token = service.verifyUser(pjUser);
-            PJUserDTO pjUserDTO = new PJUserDTO(pjUser.getUsername(), token);
+            PJUserDTO pjUserDTO = new PJUserDTO(service.getUserByUsername(pjUser.getUsername()), token);
             return responseFactory.response(pjUserDTO) ;
         }
         catch (Exception e){

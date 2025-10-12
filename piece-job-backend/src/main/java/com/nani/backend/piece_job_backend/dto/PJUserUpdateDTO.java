@@ -11,8 +11,7 @@ public class PJUserUpdateDTO extends PJUserDTO{
     private String username;
     private String newPassword;
     private String newUsername;
-    private String role;
-    private String employerType;
+
 }
 
 
