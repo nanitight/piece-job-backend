@@ -4,10 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -22,6 +19,7 @@ import java.util.List;
         property = "id"
 )
 @ToString(exclude = {"postedBy"})
+@Builder
 public class PieceJob {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

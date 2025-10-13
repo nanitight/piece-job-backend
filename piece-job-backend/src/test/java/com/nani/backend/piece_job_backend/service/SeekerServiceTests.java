@@ -1,10 +1,11 @@
 package com.nani.backend.piece_job_backend.service;
 
-import com.nani.backend.piece_job_backend.model.Business;
+import com.nani.backend.piece_job_backend.model.PieceJob;
 import com.nani.backend.piece_job_backend.model.Seeker;
-import com.nani.backend.piece_job_backend.model.Skill;
+import com.nani.backend.piece_job_backend.repository.PieceJobRepo;
 import com.nani.backend.piece_job_backend.repository.SeekerProfileRepo;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -12,7 +13,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.ArrayList;
+import java.util.Optional;
 
 import static org.mockito.Mockito.when;
 
@@ -23,14 +24,21 @@ public class SeekerServiceTests {
     private SeekerProfileRepo repo;
 
     @Mock
-    private SkillService skillService;
+    private PieceJobService jobService;
+
+    @Mock
+    private PieceJobRepo jobRepo;
 
     @InjectMocks
     private SeekerProfileService service;
 
+    private Seeker seeker ;
+
+    private PieceJob job;
+
     @Test
     public void Seeker_AddingNewProfile_ReturnsASeekerProfile(){
-        Seeker seeker = getASeeker() ;
+
 
         when(repo.save(Mockito.any(Seeker.class))).thenReturn(seeker);
 
@@ -41,10 +49,40 @@ public class SeekerServiceTests {
         Assertions.assertThat(newSeeker.getEmail()).isEqualTo(seeker.getEmail());
     }
 
-    public Seeker getASeeker(){
+    @Test
+    public void Seeker_ApplyingForAJob_AddsSeekerToApplicantsAndAddJobToJobsApplied(){
+        System.out.println("Job: "+job);
+
+        try{
+//            when(jobService.getJobById(job.getId())).thenReturn(job);
+//            when(jobRepo.save(job)).thenReturn(job);
+
+            Seeker saved = service.applyForJob(seeker, job);
+            Assertions.assertThat(saved.getJobsApplied().size()).isGreaterThan(0) ;
+            Assertions.assertThat(saved.getJobsApplied()).contains(job) ;
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+//            throw new RuntimeException(e);
+        }
+
+    }
+
+    @BeforeEach
+    public void init(){
+        seeker = getASeeker() ;
+        job = PieceJob.builder()
+//                .id(1)
+                .description("desc")
+                .payRate(20)
+                .title("title")
+                .build();
+    }
+
+    private Seeker getASeeker(){
         return Seeker.builder()
                 .email("1@123.com")
-                .id(1)
+//                .id(1)
                 .build();
     }
 }

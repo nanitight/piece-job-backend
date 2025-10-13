@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
@@ -36,5 +37,23 @@ public abstract class Individual extends Profile{
             joinColumns = { @JoinColumn(name = "ind_id")},
             inverseJoinColumns = {@JoinColumn(name = "job_id")})
     private List<PieceJob> jobsCompleted ;
+
+    public boolean canAppliedForJob(PieceJob job){
+        if (job == null)
+            return false ;
+
+        if (jobsApplied == null|| jobsApplied.isEmpty()){
+            jobsApplied= new ArrayList<>();
+            jobsApplied.add(job) ;
+            return true ;
+        }
+
+        boolean alreadyApplied = jobsApplied.stream().anyMatch(i->
+                i.getId() ==job.getId());
+        if(alreadyApplied)
+            return false ;
+        jobsApplied.add(job) ;
+        return true;
+    }
 }
 

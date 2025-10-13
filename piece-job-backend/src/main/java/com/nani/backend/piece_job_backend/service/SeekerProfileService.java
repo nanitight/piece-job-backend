@@ -26,31 +26,35 @@ public class SeekerProfileService {
         return repo.save(seeker) ;
     }
 
+    public Seeker getSeeker(int id){
+        return repo.findById(id).orElse(null);
+    }
+
+
     public List<Seeker> getAllIndividuals() {
         return repo.findAll() ;
     }
 
-    public void applyForJob(Individual applicant, int jobId) throws UserError {
+    public Seeker applyForJob(Seeker applicant, PieceJob job) throws UserError {
         if (applicant == null) {
             System.out.println("Applicant is null, wtf");
             throw new UserError("Could not find applicant");
         }
-        PieceJob job = null ;
-        try
-        {
-           job = jobService.getJobById(jobId);
-        }
-        catch (Exception ee){
-            throw new UserError(ee.getMessage());
-        }
         if (job == null){
             //non-existent job
-            throw new NotFoundError("Can't find Job with id "+jobId) ;
+            throw new NotFoundError("Job cannot be null") ;
         }
         else{
             if (!job.applyForJob(applicant)){
                 throw new UserError("Already applied for the job");
             }
+            //user-has not already applied?
+            if (!applicant.canAppliedForJob(job)){
+                throw new UserError("Already applied for the job");
+            }
+            Seeker saved = repo.save(applicant) ;
+            return saved ;
+
         }
     }
 }
