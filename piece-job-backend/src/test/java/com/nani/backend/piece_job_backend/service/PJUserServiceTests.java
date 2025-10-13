@@ -11,6 +11,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.Mockito.when;
 
@@ -24,32 +25,44 @@ public class PJUserServiceTests {
     private PJUserService service;
 
     @Test
-    public void PJUserService_CreateUser_ReturnsPJUserLoggedDTO(){
+    public void PJUserService_CreateUser_ReturnsPJUserLoggedDTO() {
         PJUser user = PJUser.builder()
                 .username("test1")
                 .password("12345")
                 .build();
 
-        when(repo.save(Mockito.any(PJUser.class))).thenReturn(user) ;
+        when(repo.save(Mockito.any(PJUser.class))).thenReturn(user);
 
-        PJUser returnedUser = service.register(user) ;
+        PJUser returnedUser = service.register(user);
 
-        Assertions.assertThat(returnedUser).isNotNull() ;
-        Assertions.assertThat(returnedUser).isNotNull() ;
+        Assertions.assertThat(returnedUser).isNotNull();
+        Assertions.assertThat(returnedUser).isNotNull();
 
     }
 
     @Test
-    public void PJUserService_GetAllUsers_ReturnsListOfUsers(){
-        List<PJUser> usersReturn = Mockito.mock(List.class) ;
+    public void PJUserService_GetAllUsers_ReturnsListOfUsers() {
+        List<PJUser> usersReturn = Mockito.mock(List.class);
 
         when(repo.findAll()).thenReturn(usersReturn);
 
-        List<PJUser> returnedUsers = service.getAllUser() ;
+        List<PJUser> returnedUsers = service.getAllUser();
 
         Assertions.assertThat(returnedUsers).isNotNull();
 
     }
 
+    @Test
+    public void UserService_deleteExistingUser_ReturnTrue(){
+        PJUser user = PJUser.builder()
+                .username("test1")
+                .password("12345")
+                .build();
 
+//        when(repo.findById(user.getId())).thenReturn(Optional.of(user));
+        boolean result = service.deleteAUser(user.getId()) ;
+
+        Assertions.assertThat(result).isTrue();
+
+    }
 }

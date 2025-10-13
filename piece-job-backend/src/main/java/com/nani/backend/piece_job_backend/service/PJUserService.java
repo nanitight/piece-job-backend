@@ -127,4 +127,16 @@ public class PJUserService {
     public List<PJUser> getAllUser() {
         return repo.findAll();
     }
+
+    public boolean deleteAUser(int userId){
+        try {
+            repo.deleteById(userId);
+            return true ;
+        }
+        catch (Exception e){
+            System.out.println("didn't delete: "+e.getMessage());
+            return false;
+        }
+    }
+
 }
