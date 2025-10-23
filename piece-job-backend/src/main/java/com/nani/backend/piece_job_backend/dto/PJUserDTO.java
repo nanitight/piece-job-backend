@@ -4,12 +4,14 @@ import com.nani.backend.piece_job_backend.model.PJUser;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.springframework.stereotype.Component;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Component
+@ToString
 public class PJUserDTO {
     private String username;
     private String password;

@@ -57,4 +57,8 @@ public class SeekerProfileService {
 
         }
     }
+
+    public Seeker getSeekerFromUsername(String username) {
+        return repo.findByUsername(username);
+    }
 }

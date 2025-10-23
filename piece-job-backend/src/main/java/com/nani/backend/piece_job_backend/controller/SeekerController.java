@@ -52,6 +52,25 @@ public class SeekerController {
         return ResponseEntity.ok(new DTOResponse<>(service.getAllIndividuals())) ;
     }
 
+    @GetMapping("/seeker/{id}")
+    public ResponseEntity<DTOResponse<Seeker>> getASeekerFromId(@PathVariable("id") int id){
+        Seeker seeker = service.getSeeker(id) ;
+        if (seeker == null){
+            return responseFactory.notFound("seeker with id "+id+" not found");
+        }
+        return ResponseEntity.ok(new DTOResponse<>(seeker)) ;
+    }
+
+    @GetMapping("/seeker-profile/{username}")
+    public  ResponseEntity<DTOResponse<Seeker>> getASeekerFromUsername(
+            @PathVariable("username") String username) {
+        Seeker seeker = service.getSeekerFromUsername(username) ;
+        if (seeker == null){
+            return responseFactory.notFound("seeker with id "+username+" not found");
+        }
+        return ResponseEntity.ok(new DTOResponse<>(seeker)) ;
+    }
+
     @PostMapping("/seeker/apply")
     public ResponseEntity<DTOResponse<Seeker>> applyForJob(@RequestParam("jobId") int jobId,
                      @RequestParam("indId") int indId){
