@@ -36,7 +36,7 @@ public class BusinessProfileController {
         return ResponseEntity.ok().body(new DTOResponse<List<Business>>(service.getAllBusinesses()));
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("business/{id}")
     public ResponseEntity<DTOResponse<Business>> getBusinessProfile(@PathVariable("id") String id) {
         int idNumber ;
         try {

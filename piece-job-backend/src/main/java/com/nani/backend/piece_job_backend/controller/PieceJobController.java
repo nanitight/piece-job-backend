@@ -3,6 +3,8 @@ package com.nani.backend.piece_job_backend.controller;
 import com.nani.backend.piece_job_backend.dto.DTOResponse;
 import com.nani.backend.piece_job_backend.dto.PieceJobDTO;
 import com.nani.backend.piece_job_backend.model.Business;
+import com.nani.backend.piece_job_backend.model.Exceptions.ForbiddenOperation;
+import com.nani.backend.piece_job_backend.model.Exceptions.NotFoundError;
 import com.nani.backend.piece_job_backend.model.PJUser;
 import com.nani.backend.piece_job_backend.model.PieceJob;
 import com.nani.backend.piece_job_backend.service.*;
@@ -13,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @CrossOrigin
@@ -32,8 +35,12 @@ public class PieceJobController {
     }
 
     @GetMapping("/jobs")
-    public ResponseEntity<List<PieceJob>> getAllJobs() {
-        return new ResponseEntity<>(jobService.getJobs(), HttpStatus.OK);
+    public ResponseEntity<List<PieceJobDTO>> getAllJobs() {
+        List<PieceJobDTO> allJobs = new ArrayList<>();
+        for(PieceJob job : jobService.getJobs())
+            allJobs.add(new PieceJobDTO(job));
+
+        return new ResponseEntity<>(allJobs, HttpStatus.OK);
     }
 
     @RequestMapping("/jobs/{id}")
@@ -78,23 +85,49 @@ public class PieceJobController {
             @PathVariable("id") int id,@RequestBody PieceJob job){
         try {
             Business business = getBusinessFromRequestToken(request);
-            if (business == null)
-                return responseFactory.errorResponse("Only a Business can update a job",HttpStatus.FORBIDDEN) ;
             if (job.getPostedBy() == null)
                 job.setPostedBy(business);
-            if (business.getId() != job.getPostedBy().getId()){
-                    return responseFactory.errorResponse(
-                            "Only a Business that posted the job can update a job",HttpStatus.FORBIDDEN) ;
-            }
+            authoriseBusinessOnJobOperations(request,job) ;
             return new ResponseEntity<>(new DTOResponse<>(jobService.updateAJob(id,job)), HttpStatus.OK);
+        }
+        catch (ForbiddenOperation e){
+            return responseFactory.errorResponse(e.getMessage(),HttpStatus.FORBIDDEN) ;
         }
         catch (Exception e){
             return responseFactory.errorResponse(e) ;
         }
     }
 
+    private void authoriseBusinessOnJobOperations(HttpServletRequest request, PieceJob job) throws Exception {
+        Business business = getBusinessFromRequestToken(request);
+        if (business == null)
+            throw new ForbiddenOperation("Only a Business can update a job") ;
+
+        if (business.getId() != job.getPostedBy().getId()){
+           throw  new ForbiddenOperation(
+                    "Only a Business that posted the job can update a job") ;
+        }
+    }
+
     @DeleteMapping("/jobs/{id}")
-    public void deleteJobById(@PathVariable("id") int id){
-        jobService.deleteAJob(id) ;
+    public ResponseEntity<DTOResponse<String>> deleteJobById(HttpServletRequest request
+            ,@PathVariable("id") int id){
+        try {
+            PieceJob job = jobService.getJobById(id);
+            if (job == null)
+                throw new NotFoundError("Job with id "+id+ "is not found") ;
+            authoriseBusinessOnJobOperations(request,job);
+            jobService.deleteAJob(id);
+            return responseFactory.response("Job deleted");
+        }
+        catch (ForbiddenOperation e){
+            return responseFactory.errorResponse(e.getMessage(),HttpStatus.FORBIDDEN) ;
+        }
+        catch (NotFoundError e){
+            return responseFactory.errorResponse(e.getMessage(),HttpStatus.NOT_FOUND);
+        }
+        catch (Exception e){
+            return responseFactory.errorResponse(e) ;
+        }
     }
 }
