@@ -27,11 +27,14 @@ public class Business extends Profile {
     @ManyToMany
     @JoinTable(name="business_required_skills", joinColumns = {@JoinColumn(name="p_id")},
         inverseJoinColumns = {@JoinColumn(name = "skill_id")})
-    private List<Skill> skillsRequired ;
+    private List<Skill> skillsRequired = new ArrayList<>();
     @OneToMany(mappedBy = "postedBy")
     private List<PieceJob> jobsPosted =new ArrayList<>();
 
-    public void updateToNewBusinessObject(Business business) {
+    @Override
+    public void updateToNewInformation(Profile profile) {
+        super.updateToNewInformation(profile);
+        Business business = (Business) profile ;
         this.companyName = business.getCompanyName() != null ? business.getCompanyName() : this.companyName;
         this.companyAddress = business.getCompanyAddress()  != null ? business.getCompanyAddress() : this.companyAddress;
         this.companyRegisterNumber = business.getCompanyRegisterNumber()  != null ? business.getCompanyRegisterNumber() : this.companyRegisterNumber;

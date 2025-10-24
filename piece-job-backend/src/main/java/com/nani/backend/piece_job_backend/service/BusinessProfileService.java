@@ -1,12 +1,10 @@
 package com.nani.backend.piece_job_backend.service;
 
-import com.nani.backend.piece_job_backend.dto.DTOResponse;
 import com.nani.backend.piece_job_backend.model.Business;
 import com.nani.backend.piece_job_backend.model.Skill;
 import com.nani.backend.piece_job_backend.repository.BusinessProfileRepo;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -39,7 +37,7 @@ public class BusinessProfileService {
         }
         else{
             business.setSkillsRequired(skillService.getAndSaveSkillsFromBusiness(business));
-            exists.updateToNewBusinessObject(business);
+            exists.updateToNewInformation(business);
             exists = repo.save(exists) ;
             return exists;
         }

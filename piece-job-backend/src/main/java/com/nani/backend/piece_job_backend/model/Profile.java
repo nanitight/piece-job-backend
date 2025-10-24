@@ -1,7 +1,6 @@
 package com.nani.backend.piece_job_backend.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.nani.backend.piece_job_backend.dto.PJUserDTO;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -33,6 +32,11 @@ public abstract class Profile {
         this.user = user ;
         this.user.setEmployerType("individual");
         this.user.setRole("jobSeeker");
+    }
+    public void updateToNewInformation(Profile profile){
+        this.firstName = profile.getFirstName() != null ? profile.getFirstName() : this.firstName;
+        this.lastName = profile.getLastName() != null ? profile.getLastName() : this.lastName;
+        this.email = profile.getEmail() != null ? profile.getEmail() : this.email;
     }
 
 }

@@ -55,5 +55,14 @@ public abstract class Individual extends Profile{
         jobsApplied.add(job) ;
         return true;
     }
+
+    @Override
+    public void updateToNewInformation(Profile profile) {
+        super.updateToNewInformation(profile);
+        Seeker seeker = (Seeker) profile ;
+        this.skillSet = seeker.getSkillSet() != null ? seeker.getSkillSet() : this.skillSet;
+
+    }
+
 }
 

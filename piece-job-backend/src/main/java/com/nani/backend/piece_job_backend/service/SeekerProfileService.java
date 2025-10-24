@@ -1,11 +1,8 @@
 package com.nani.backend.piece_job_backend.service;
 
+import com.nani.backend.piece_job_backend.model.*;
 import com.nani.backend.piece_job_backend.model.Exceptions.UserError;
 import com.nani.backend.piece_job_backend.model.Exceptions.NotFoundError;
-import com.nani.backend.piece_job_backend.model.Individual;
-import com.nani.backend.piece_job_backend.model.PieceJob;
-import com.nani.backend.piece_job_backend.model.Seeker;
-import com.nani.backend.piece_job_backend.model.Skill;
 import com.nani.backend.piece_job_backend.repository.SeekerProfileRepo;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -60,5 +57,29 @@ public class SeekerProfileService {
 
     public Seeker getSeekerFromUsername(String username) {
         return repo.findByUsername(username);
+    }
+
+    public Seeker updateSeekerProfile(int id, Seeker seeker) {
+        Seeker exists = repo.findById(id).orElse(null) ;
+        if (exists == null) {
+            throw new RuntimeException("seeker profile with id " + id + " not found");
+        }
+        else{
+            seeker.setSkillSet(skillService.getAndSaveSkillsFromIndividual(seeker));
+            exists.updateToNewInformation(seeker);
+            exists = repo.save(exists) ;
+            return exists;
+        }
+    }
+
+    public Seeker deleteSeekerProfile(int id) {
+        Seeker exists = repo.findById(id).orElse(null) ;
+        if (exists == null) {
+            throw new RuntimeException("business profile with id " + id + " not found");
+        }
+        else{
+            repo.deleteById(id);
+            return exists;
+        }
     }
 }

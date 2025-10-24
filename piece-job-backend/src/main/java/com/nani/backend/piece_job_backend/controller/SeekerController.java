@@ -1,6 +1,7 @@
 package com.nani.backend.piece_job_backend.controller;
 
 import com.nani.backend.piece_job_backend.dto.DTOResponse;
+import com.nani.backend.piece_job_backend.model.Business;
 import com.nani.backend.piece_job_backend.model.Exceptions.UserError;
 import com.nani.backend.piece_job_backend.model.PJUser;
 import com.nani.backend.piece_job_backend.model.PieceJob;
@@ -104,5 +105,34 @@ public class SeekerController {
         }
 
 
+    }
+
+    @PutMapping("/business/{id}")
+    public ResponseEntity<DTOResponse<Seeker>> updateSeekerProfile(
+            @PathVariable("id") int id, @RequestBody Seeker seeker) {
+
+        if (seeker == null) {
+            return new ResponseEntity<>(new DTOResponse<>("seeker update cannot be null"),HttpStatus.BAD_REQUEST);
+        }
+        else{
+            try {
+                return  new ResponseEntity<>(
+                        new DTOResponse<>(service.updateSeekerProfile(id,seeker)),
+                        HttpStatus.OK);
+            } catch (Exception e) {
+                return new ResponseEntity<>(new DTOResponse<>(e.getMessage()),HttpStatus.BAD_REQUEST);
+            }
+        }
+    }
+
+    @DeleteMapping("/business/{id}")
+    public ResponseEntity<DTOResponse<String>> deleteSeekerProfile(@PathVariable("id") int id){
+        try {
+            return new ResponseEntity<>(new DTOResponse<>(
+                    "deleted job seeker: "+service.deleteSeekerProfile(id)),HttpStatus.OK);
+        }
+        catch (Exception e) {
+            return new ResponseEntity<>(new DTOResponse<>(e.getMessage()),HttpStatus.BAD_REQUEST);
+        }
     }
 }
