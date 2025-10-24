@@ -35,12 +35,30 @@ public class PieceJobController {
     }
 
     @GetMapping("/jobs")
-    public ResponseEntity<List<PieceJobDTO>> getAllJobs() {
+    public ResponseEntity<DTOResponse<List<PieceJobDTO>>> getAllJobsByBusiness(
+            HttpServletRequest request
+    ) {
+        try{
+            Business business = getBusinessFromRequestToken(request);
+            if (business == null)
+                return responseFactory.errorResponse("Only a valid business can access jobs",HttpStatus.UNAUTHORIZED);
+            List<PieceJobDTO> allJobs = new ArrayList<>();
+            for(PieceJob job : business.getJobsPosted())
+                allJobs.add(new PieceJobDTO(job));
+
+            return new ResponseEntity<>(new DTOResponse<>(allJobs), HttpStatus.OK);
+        } catch (Exception e) {
+            return responseFactory.errorResponse(e) ;
+        }
+    }
+
+    @GetMapping("/piece-jobs")
+    public ResponseEntity<DTOResponse<List<PieceJobDTO>>> getAllJobs() {
         List<PieceJobDTO> allJobs = new ArrayList<>();
         for(PieceJob job : jobService.getJobs())
             allJobs.add(new PieceJobDTO(job));
 
-        return new ResponseEntity<>(allJobs, HttpStatus.OK);
+        return new ResponseEntity<>(new DTOResponse<>(allJobs), HttpStatus.OK);
     }
 
     @RequestMapping("/jobs/{id}")

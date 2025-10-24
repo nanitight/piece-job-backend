@@ -1,5 +1,7 @@
 package com.nani.backend.piece_job_backend.service;
 
+import com.nani.backend.piece_job_backend.model.Business;
+import com.nani.backend.piece_job_backend.model.Exceptions.UserError;
 import com.nani.backend.piece_job_backend.model.PieceJob;
 import com.nani.backend.piece_job_backend.model.Skill;
 import com.nani.backend.piece_job_backend.repository.PieceJobRepo;
@@ -19,6 +21,12 @@ public class PieceJobService {
 
     public List<PieceJob> getJobs(){
         return repo.findAll();
+    }
+    public List<PieceJob> getJobs(Business byBusiness) throws Exception{
+        List<PieceJob> allJobsByBuss = repo.findAllFromBusinessId(byBusiness.getId());
+        if (allJobsByBuss == null)
+            throw new UserError("something went wrong");
+        return allJobsByBuss;
     }
 
     public PieceJob getJobById(int id){
