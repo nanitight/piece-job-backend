@@ -1,12 +1,16 @@
 package com.nani.backend.piece_job_backend.service;
 
+import com.nani.backend.piece_job_backend.dto.IndividualDTO;
 import com.nani.backend.piece_job_backend.model.Business;
+import com.nani.backend.piece_job_backend.model.Exceptions.NotFoundError;
 import com.nani.backend.piece_job_backend.model.Exceptions.UserError;
+import com.nani.backend.piece_job_backend.model.Individual;
 import com.nani.backend.piece_job_backend.model.PieceJob;
 import com.nani.backend.piece_job_backend.model.Skill;
 import com.nani.backend.piece_job_backend.repository.PieceJobRepo;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -54,5 +58,20 @@ public class PieceJobService {
 
     public void deleteAJob(int id) {
         repo.deleteById(id);
+    }
+
+    public List<IndividualDTO> getApplicantsFromJob(int id) throws Exception{
+        PieceJob job = getJobById(id) ;
+        if (job == null){
+            System.out.println("job with id "+id+" is not found");
+            throw new NotFoundError("job with id "+id+" is not found") ;
+        }
+        System.out.println("job: "+job);
+        List<IndividualDTO> applicants = new ArrayList<>() ;
+        for (Individual i : job.getJobApplicants())
+            applicants.add(new IndividualDTO(i)) ;
+        System.out.println("applicants: "+applicants);
+        return applicants ;
+
     }
 }

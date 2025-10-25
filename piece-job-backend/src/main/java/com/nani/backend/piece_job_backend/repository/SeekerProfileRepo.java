@@ -10,4 +10,7 @@ import org.springframework.stereotype.Repository;
 public interface SeekerProfileRepo extends JpaRepository<Seeker, Integer> {
     @Query("Select s from Seeker s WHERE s.user.username = :username")
     Seeker findByUsername(@Param("username") String username);
+
+    @Query("Select s from Seeker s WHERE s.user.id = :userId")
+    Seeker findByUserId(@Param("userId") int userId) ;
 }

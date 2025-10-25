@@ -1,21 +1,27 @@
 package com.nani.backend.piece_job_backend.service;
 
 import com.nani.backend.piece_job_backend.model.Business;
+import com.nani.backend.piece_job_backend.model.PJUser;
 import com.nani.backend.piece_job_backend.model.Skill;
 import com.nani.backend.piece_job_backend.repository.BusinessProfileRepo;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class BusinessProfileService {
+public class BusinessProfileService extends ProfileService{
 
     private BusinessProfileRepo repo;
     private SkillService skillService;
+    private JwtService jwtService;
+    private PJUserService userService;
 
-    public BusinessProfileService(BusinessProfileRepo repo, SkillService skillService) {
+    public BusinessProfileService(BusinessProfileRepo repo, SkillService skillService, JwtService jwtService, PJUserService userService) {
         this.repo = repo;
         this.skillService = skillService;
+        this.jwtService = jwtService;
+        this.userService = userService;
     }
 
     public Business getBusinessProfile(int id) {
@@ -60,6 +66,14 @@ public class BusinessProfileService {
 
     public List<Business> getAllBusinesses() {
         return repo.findAll();
+    }
+
+    public Business getProfileFromRequestToken(HttpServletRequest request) throws Exception {
+        String token = jwtService.getTokenFromRequest(request);
+        System.out.println("token: "+ token );
+
+        PJUser user = userService.getUserFromToken(token);
+        return getBusinessProfileFromUserId(user.getId());
     }
 
 }

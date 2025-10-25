@@ -18,10 +18,10 @@ public abstract class Profile {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private int id;
-    private String firstName;
-    private String lastName;
+    private String firstName ="";
+    private String lastName ="";
 //    @Column(unique = true)
-    private String email;
+    private String email = "";
 
     @OneToOne
     @JoinColumn(name = "userId")

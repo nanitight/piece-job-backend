@@ -26,17 +26,17 @@ public abstract class Individual extends Profile{
     @JoinTable(name = "individuals_skills_set",
             joinColumns = { @JoinColumn(name = "ind_id")},
             inverseJoinColumns = {@JoinColumn(name = "skill_id")})
-    private List<Skill> skillSet ;
+    private List<Skill> skillSet = new ArrayList<>();
     @ManyToMany
     @JoinTable(name = "jobs_applied_by_individual",
             joinColumns = { @JoinColumn(name = "ind_id")},
             inverseJoinColumns = {@JoinColumn(name = "job_id")})
-    private List<PieceJob> jobsApplied;
+    private List<PieceJob> jobsApplied = new ArrayList<>();
     @ManyToMany
     @JoinTable(name = "jobs_completed_by_individual",
             joinColumns = { @JoinColumn(name = "ind_id")},
             inverseJoinColumns = {@JoinColumn(name = "job_id")})
-    private List<PieceJob> jobsCompleted ;
+    private List<PieceJob> jobsCompleted = new ArrayList<>();
 
     public boolean canAppliedForJob(PieceJob job){
         if (job == null)

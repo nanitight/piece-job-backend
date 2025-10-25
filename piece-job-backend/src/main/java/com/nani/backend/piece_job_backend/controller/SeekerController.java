@@ -107,7 +107,7 @@ public class SeekerController {
 
     }
 
-    @PutMapping("/business/{id}")
+    @PutMapping("/seeker/{id}")
     public ResponseEntity<DTOResponse<Seeker>> updateSeekerProfile(
             @PathVariable("id") int id, @RequestBody Seeker seeker) {
 
@@ -125,8 +125,9 @@ public class SeekerController {
         }
     }
 
-    @DeleteMapping("/business/{id}")
-    public ResponseEntity<DTOResponse<String>> deleteSeekerProfile(@PathVariable("id") int id){
+    @DeleteMapping("/seeker/{id}")
+    public ResponseEntity<DTOResponse<String>> deleteSeekerProfile(@PathVariable("id") int id)
+    {
         try {
             return new ResponseEntity<>(new DTOResponse<>(
                     "deleted job seeker: "+service.deleteSeekerProfile(id)),HttpStatus.OK);

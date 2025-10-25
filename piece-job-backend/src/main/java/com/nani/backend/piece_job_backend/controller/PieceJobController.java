@@ -1,11 +1,12 @@
 package com.nani.backend.piece_job_backend.controller;
 
 import com.nani.backend.piece_job_backend.dto.DTOResponse;
+import com.nani.backend.piece_job_backend.dto.IndividualDTO;
 import com.nani.backend.piece_job_backend.dto.PieceJobDTO;
 import com.nani.backend.piece_job_backend.model.Business;
 import com.nani.backend.piece_job_backend.model.Exceptions.ForbiddenOperation;
 import com.nani.backend.piece_job_backend.model.Exceptions.NotFoundError;
-import com.nani.backend.piece_job_backend.model.PJUser;
+import com.nani.backend.piece_job_backend.model.Exceptions.UserError;
 import com.nani.backend.piece_job_backend.model.PieceJob;
 import com.nani.backend.piece_job_backend.service.*;
 import io.jsonwebtoken.security.SecurityException;
@@ -22,16 +23,12 @@ import java.util.List;
 @RestController
 public class PieceJobController {
     PieceJobService jobService;
-    JwtService jwtService;
     BusinessProfileService businessService;
-    PJUserService userService;
 
     public PieceJobController(PieceJobService jobService, JwtService jwtService,
               BusinessProfileService businessService, PJUserService userService) {
         this.jobService = jobService;
-        this.jwtService = jwtService;
         this.businessService = businessService;
-        this.userService = userService;
     }
 
     @GetMapping("/jobs")
@@ -39,7 +36,7 @@ public class PieceJobController {
             HttpServletRequest request
     ) {
         try{
-            Business business = getBusinessFromRequestToken(request);
+            Business business = businessService.getProfileFromRequestToken(request);
             if (business == null)
                 return responseFactory.errorResponse("Only a valid business can access jobs",HttpStatus.UNAUTHORIZED);
             List<PieceJobDTO> allJobs = new ArrayList<>();
@@ -68,13 +65,27 @@ public class PieceJobController {
             return new ResponseEntity<>(new PieceJobDTO(job),HttpStatus.OK);
         else
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
 
+    @GetMapping("/jobApplicants/{id}")
+    public ResponseEntity<DTOResponse<List<IndividualDTO>>> getApplicantsForJob(
+            @PathVariable("id") int id
+    ){
+        try{
+            return responseFactory.response(jobService.getApplicantsFromJob(id));
+        }
+        catch (UserError e){
+            return responseFactory.errorResponse(e) ;
+        }
+        catch (Exception e){
+            return responseFactory.errorResponse(e) ;
+        }
     }
 
     @PostMapping("/jobs")
     public ResponseEntity<DTOResponse<PieceJob>> addJob(HttpServletRequest request, @RequestBody PieceJob job){
         try {
-            Business business = getBusinessFromRequestToken(request);
+            Business business = businessService.getProfileFromRequestToken(request);
             System.out.println("business: "+ business  + " job: "+ job);
             if (business == null)
                 return responseFactory.errorResponse("Only a Business can post a job",HttpStatus.FORBIDDEN) ;
@@ -90,19 +101,12 @@ public class PieceJobController {
         }
     }
 
-    private Business getBusinessFromRequestToken(HttpServletRequest request) throws Exception {
-        String token = jwtService.getTokenFromRequest(request);
-        System.out.println("token: "+ token );
-
-        PJUser user = userService.getUserFromToken(token);
-        return businessService.getBusinessProfileFromUserId(user.getId());
-    }
 
     @PutMapping("/jobs/{id}")
     public ResponseEntity<DTOResponse<PieceJob>> updateAJob(HttpServletRequest request,
             @PathVariable("id") int id,@RequestBody PieceJob job){
         try {
-            Business business = getBusinessFromRequestToken(request);
+            Business business =businessService.getProfileFromRequestToken(request);
             if (job.getPostedBy() == null)
                 job.setPostedBy(business);
             authoriseBusinessOnJobOperations(request,job) ;
@@ -117,7 +121,7 @@ public class PieceJobController {
     }
 
     private void authoriseBusinessOnJobOperations(HttpServletRequest request, PieceJob job) throws Exception {
-        Business business = getBusinessFromRequestToken(request);
+        Business business = businessService.getProfileFromRequestToken(request);
         if (business == null)
             throw new ForbiddenOperation("Only a Business can update a job") ;
 

@@ -4,13 +4,14 @@ import com.nani.backend.piece_job_backend.model.*;
 import com.nani.backend.piece_job_backend.model.Exceptions.UserError;
 import com.nani.backend.piece_job_backend.model.Exceptions.NotFoundError;
 import com.nani.backend.piece_job_backend.repository.SeekerProfileRepo;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 @AllArgsConstructor
 @Service
-public class SeekerProfileService {
+public class SeekerProfileService extends ProfileService{
 
     private final SkillService skillService;
     private final SeekerProfileRepo repo;
@@ -81,5 +82,10 @@ public class SeekerProfileService {
             repo.deleteById(id);
             return exists;
         }
+    }
+
+    @Override
+    public Seeker getProfileFromRequestToken(HttpServletRequest request) throws Exception {
+        return null;
     }
 }

@@ -16,8 +16,8 @@ public class PJUserDTO {
     private String username;
     private String password;
     private String loggedInToken;
-    private String role;
-    private String employerType;
+    protected String role;
+    protected String employerType;
 
     public PJUserDTO(String username) {
         this.username = username;

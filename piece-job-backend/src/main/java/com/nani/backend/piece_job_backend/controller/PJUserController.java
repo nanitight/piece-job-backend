@@ -76,9 +76,9 @@ public class PJUserController {
             //expect pjUser with correct Id
             PJUserDTO updatedPjUser = service.updateUser(pjUser);
             System.out.println("updated user: "+ updatedPjUser);
-
-            PJUserDTO pjUserDTO = new PJUserDTO(updatedPjUser.getUsername(), token);
-            return new ResponseEntity<>(new DTOResponse<>(pjUserDTO), HttpStatus.OK);
+            if (updatedPjUser.getLoggedInToken()== null ||updatedPjUser.getLoggedInToken().isEmpty() )
+                updatedPjUser.setLoggedInToken(token);
+            return new ResponseEntity<>(new DTOResponse<>(updatedPjUser), HttpStatus.OK);
 
         }
         catch (Exception e) {

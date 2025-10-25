@@ -35,13 +35,13 @@ public class PieceJob {
     @ManyToMany
     @JoinTable(name = "skills_in_jobs",  joinColumns = {@JoinColumn(name = "job_id")},
     inverseJoinColumns = {@JoinColumn(name = "skill_id")})
-    private List<Skill> skills;
+    private List<Skill> skills = new ArrayList<>();
     @ManyToOne
     @JsonIgnore
     private Business postedBy;
 
     @ManyToMany(mappedBy = "jobsApplied")
-    private List<Individual> jobApplicants ;
+    private List<Individual> jobApplicants = new ArrayList<>();
 
     public void updateToNewPieceJobInformation(PieceJob job) {
         this.title = job.getTitle() == null ? title : job.getTitle();

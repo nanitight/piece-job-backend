@@ -20,9 +20,9 @@ import java.util.List;
 )
 public class Business extends Profile {
     @Column(unique = true)
-    private String companyName;
-    private String companyAddress;
-    private String companyRegisterNumber;
+    private String companyName = "";
+    private String companyAddress = "";
+    private String companyRegisterNumber = "";
 
     @ManyToMany
     @JoinTable(name="business_required_skills", joinColumns = {@JoinColumn(name="p_id")},

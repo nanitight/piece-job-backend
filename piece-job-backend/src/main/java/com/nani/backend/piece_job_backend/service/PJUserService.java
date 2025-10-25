@@ -100,27 +100,23 @@ public class PJUserService {
             oldPjUser.setEmployerType(pjUser.getEmployerType());
 
         if (updatedPassword == null && updatedUsername == null){
-            repo.save(oldPjUser);
-            return new PJUserDTO(oldPjUser.getUsername(),pjUser.getLoggedInToken());
+            return new PJUserDTO(repo.save(oldPjUser),pjUser.getLoggedInToken());
         }
         else if (updatedUsername != null && updatedPassword == null){
             //username not null
             oldPjUser.setUsername(updatedUsername) ;
-            repo.save(oldPjUser);
-            return new PJUserDTO(oldPjUser.getUsername(),verifyUser(oldPjUser)) ;
+            return new PJUserDTO(repo.save(oldPjUser),verifyUser(oldPjUser)) ;
 
         }
         else if (updatedUsername == null){
             //password not null
             oldPjUser.setPassword(updatedPassword) ;
-            repo.save(oldPjUser);
-            return new PJUserDTO(oldPjUser.getUsername(),pjUser.getLoggedInToken());
+            return new PJUserDTO(repo.save(oldPjUser),pjUser.getLoggedInToken());
         }
         else{
             oldPjUser.setUsername(updatedUsername);
             oldPjUser.setPassword(updatedPassword);
-            repo.save(oldPjUser);
-            return new PJUserDTO(oldPjUser.getUsername(),pjUser.getLoggedInToken());
+            return new PJUserDTO(repo.save(oldPjUser),pjUser.getLoggedInToken());
         }
     }
 
