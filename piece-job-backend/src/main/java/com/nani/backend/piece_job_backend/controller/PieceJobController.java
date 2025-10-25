@@ -2,6 +2,7 @@ package com.nani.backend.piece_job_backend.controller;
 
 import com.nani.backend.piece_job_backend.dto.DTOResponse;
 import com.nani.backend.piece_job_backend.dto.IndividualDTO;
+import com.nani.backend.piece_job_backend.dto.PieceJobApplicantsDTO;
 import com.nani.backend.piece_job_backend.dto.PieceJobDTO;
 import com.nani.backend.piece_job_backend.model.Business;
 import com.nani.backend.piece_job_backend.model.Exceptions.ForbiddenOperation;
@@ -68,7 +69,7 @@ public class PieceJobController {
     }
 
     @GetMapping("/jobApplicants/{id}")
-    public ResponseEntity<DTOResponse<List<IndividualDTO>>> getApplicantsForJob(
+    public ResponseEntity<DTOResponse<PieceJobApplicantsDTO>> getApplicantsForJob(
             @PathVariable("id") int id
     ){
         try{
