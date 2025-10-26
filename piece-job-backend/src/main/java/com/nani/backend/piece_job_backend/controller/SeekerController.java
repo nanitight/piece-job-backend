@@ -72,6 +72,19 @@ public class SeekerController {
         return ResponseEntity.ok(new DTOResponse<>(seeker)) ;
     }
 
+    @GetMapping("/seeker/user")
+    public ResponseEntity<DTOResponse<Seeker>> getSeekerProfile(HttpServletRequest request){
+        try {
+            return responseFactory.response(service.getProfileFromRequestToken(request)) ;
+        }
+        catch (UserError e){
+            return responseFactory.errorResponse(e) ;
+        }
+        catch (Exception e){
+            return responseFactory.errorResponse(e) ;
+        }
+    }
+
     @PostMapping("/seeker/apply")
     public ResponseEntity<DTOResponse<Seeker>> applyForJob(@RequestParam("jobId") int jobId,
                      @RequestParam("indId") int indId){

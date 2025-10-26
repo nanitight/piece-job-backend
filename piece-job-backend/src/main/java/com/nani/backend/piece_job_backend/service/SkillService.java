@@ -30,7 +30,7 @@ public class SkillService {
         List<Skill> skills = new ArrayList<>();
 
         for (Skill skill : business.getSkillsRequired()) {
-            Skill exists = repo.findSkillBySkillName(skill.getSkillName()) ;
+            Skill exists = repo.findSkillBySkillName(skill.getSkillName()).orElse(null) ;
             if (exists == null) {
                 exists = repo.save(skill) ;
                 System.out.println("skill not found from db...");
@@ -47,7 +47,7 @@ public class SkillService {
         List<Skill> skills = new ArrayList<>();
 
         for (Skill skill : individual.getSkillSet()) {
-            Skill exists = repo.findSkillBySkillName(skill.getSkillName()) ;
+            Skill exists = repo.findSkillBySkillName(skill.getSkillName()).orElse(null) ;
             if (exists == null) {
                 exists = repo.save(skill) ;
                 System.out.println("skill not found from db...");
@@ -67,7 +67,7 @@ public class SkillService {
         }
 
         for (Skill skill : job.getSkills()) {
-            Skill exists = repo.findSkillBySkillName(skill.getSkillName()) ;
+            Skill exists = repo.findSkillBySkillName(skill.getSkillName()).orElse(null) ;
             if (exists == null) {
 
                 exists = repo.save(skill) ;
@@ -83,7 +83,7 @@ public class SkillService {
 
     public List<Skill> getSkillFromNamePattern(String skillName){
 
-        return repo.findSkillThatHasPattern(skillName) ;
+        return repo.findSkillThatHasPattern(skillName).orElse(new ArrayList<>()) ;
     }
 
     public List<SkillRequiredByBusinessDTO> getSkillsRequiredByBusiness() {

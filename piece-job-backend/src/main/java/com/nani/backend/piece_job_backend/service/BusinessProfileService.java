@@ -1,6 +1,8 @@
 package com.nani.backend.piece_job_backend.service;
 
 import com.nani.backend.piece_job_backend.model.Business;
+import com.nani.backend.piece_job_backend.model.Exceptions.NotFoundError;
+import com.nani.backend.piece_job_backend.model.Exceptions.UserError;
 import com.nani.backend.piece_job_backend.model.PJUser;
 import com.nani.backend.piece_job_backend.model.Skill;
 import com.nani.backend.piece_job_backend.repository.BusinessProfileRepo;
@@ -17,11 +19,12 @@ public class BusinessProfileService extends ProfileService{
     private JwtService jwtService;
     private PJUserService userService;
 
-    public BusinessProfileService(BusinessProfileRepo repo, SkillService skillService, JwtService jwtService, PJUserService userService) {
+    public BusinessProfileService(JwtService jwtService, PJUserService userService, BusinessProfileRepo repo, SkillService skillService, JwtService jwtService1, PJUserService userService1) {
+        super(jwtService, userService);
         this.repo = repo;
         this.skillService = skillService;
-        this.jwtService = jwtService;
-        this.userService = userService;
+        this.jwtService = jwtService1;
+        this.userService = userService1;
     }
 
     public Business getBusinessProfile(int id) {
@@ -60,8 +63,10 @@ public class BusinessProfileService extends ProfileService{
         }
     }
 
-    public Business getBusinessProfileFromUserId(int id) {
-        return repo.getBusinessProfileFromUserId(id) ;
+    public Business getBusinessProfileFromUserId(int id) throws UserError {
+        String notFoundMsg = "logged in user has no business profile" ;
+        return repo.getBusinessProfileFromUserId(id)
+                .orElseThrow(()->new NotFoundError(notFoundMsg));
     }
 
     public List<Business> getAllBusinesses() {
@@ -69,11 +74,16 @@ public class BusinessProfileService extends ProfileService{
     }
 
     public Business getProfileFromRequestToken(HttpServletRequest request) throws Exception {
-        String token = jwtService.getTokenFromRequest(request);
-        System.out.println("token: "+ token );
-
-        PJUser user = userService.getUserFromToken(token);
-        return getBusinessProfileFromUserId(user.getId());
+        PJUser user = getUserFromRequest(request) ;
+        try {
+            return getBusinessProfileFromUserId(user.getId());
+        }
+        catch (UserError e){
+            throw e ;
+        }
+        catch (Exception e) {
+            throw new UserError(e.getMessage());
+        }
     }
 
 }

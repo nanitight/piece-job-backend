@@ -52,7 +52,7 @@ public class BusinessProfileRepoTests {
                 .build() ;
 //        System.out.println("Test saved business: "+business);
         Business insert = repo.save(business) ;
-        Business saved = repo.getBusinessProfileFromUserId(userId) ;
+        Business saved = repo.getBusinessProfileFromUserId(userId).orElse(null) ;
 
         Assertions.assertThat(saved).isNotNull() ;
         Assertions.assertThat(saved.getId()).isGreaterThan(0) ;

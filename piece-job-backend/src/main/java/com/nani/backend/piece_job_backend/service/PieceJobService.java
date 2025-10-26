@@ -28,7 +28,7 @@ public class PieceJobService {
         return repo.findAll();
     }
     public List<PieceJob> getJobs(Business byBusiness) throws Exception{
-        List<PieceJob> allJobsByBuss = repo.findAllFromBusinessId(byBusiness.getId());
+        List<PieceJob> allJobsByBuss = repo.findAllFromBusinessId(byBusiness.getId()).orElse(null);
         if (allJobsByBuss == null)
             throw new UserError("something went wrong");
         return allJobsByBuss;

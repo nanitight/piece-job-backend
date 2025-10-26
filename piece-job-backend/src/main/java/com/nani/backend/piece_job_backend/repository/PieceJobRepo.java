@@ -6,8 +6,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface PieceJobRepo extends JpaRepository<PieceJob,Integer> {
     @Query("Select p from PieceJob p where p.postedBy.id = :busId")
-    public List<PieceJob> findAllFromBusinessId(@Param("busId") int busId); //@Param("busId")int busId ) ;
+    public Optional<List<PieceJob>> findAllFromBusinessId(@Param("busId") int busId); //@Param("busId")int busId ) ;
 }

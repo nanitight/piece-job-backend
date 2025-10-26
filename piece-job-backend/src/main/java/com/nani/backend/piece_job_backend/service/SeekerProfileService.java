@@ -5,17 +5,20 @@ import com.nani.backend.piece_job_backend.model.Exceptions.UserError;
 import com.nani.backend.piece_job_backend.model.Exceptions.NotFoundError;
 import com.nani.backend.piece_job_backend.repository.SeekerProfileRepo;
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-@AllArgsConstructor
 @Service
 public class SeekerProfileService extends ProfileService{
 
     private final SkillService skillService;
     private final SeekerProfileRepo repo;
-    private final PieceJobService jobService;
+
+    public SeekerProfileService(JwtService jwtService, PJUserService userService, SkillService skillService, SeekerProfileRepo repo) {
+        super(jwtService, userService);
+        this.skillService = skillService;
+        this.repo = repo;
+    }
 
     public Seeker saveSeekerProfile(Seeker seeker) {
         List<Skill> skills = skillService.getAndSaveSkillsFromIndividual(seeker);
@@ -57,7 +60,7 @@ public class SeekerProfileService extends ProfileService{
     }
 
     public Seeker getSeekerFromUsername(String username) {
-        return repo.findByUsername(username);
+        return repo.findByUsername(username).orElse(null);
     }
 
     public Seeker updateSeekerProfile(int id, Seeker seeker) {
@@ -84,8 +87,22 @@ public class SeekerProfileService extends ProfileService{
         }
     }
 
+    public Seeker getSeekerProfileFromUserId(int id) throws UserError{
+        String notFoundMessage = "logged in user has no seeker profile" ;
+        return repo.findByUserId(id).orElseThrow(()->new NotFoundError(notFoundMessage)) ;
+    }
+
     @Override
     public Seeker getProfileFromRequestToken(HttpServletRequest request) throws Exception {
-        return null;
+        PJUser user = getUserFromRequest(request) ;
+        try {
+            return getSeekerProfileFromUserId(user.getId());
+        }
+        catch (UserError e){
+            throw e ;
+        }
+        catch (Exception e) {
+            throw new UserError(e.getMessage());
+        }
     }
 }

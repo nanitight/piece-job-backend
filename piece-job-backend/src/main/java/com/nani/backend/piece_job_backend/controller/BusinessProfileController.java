@@ -2,6 +2,7 @@ package com.nani.backend.piece_job_backend.controller;
 
 import com.nani.backend.piece_job_backend.dto.DTOResponse;
 import com.nani.backend.piece_job_backend.model.Business;
+import com.nani.backend.piece_job_backend.model.Exceptions.UserError;
 import com.nani.backend.piece_job_backend.model.PJUser;
 import com.nani.backend.piece_job_backend.service.BusinessProfileService;
 import com.nani.backend.piece_job_backend.service.responseFactory;
@@ -37,18 +38,26 @@ public class BusinessProfileController {
     }
 
     @GetMapping("business/{id}")
-    public ResponseEntity<DTOResponse<Business>> getBusinessProfile(@PathVariable("id") String id) {
-        int idNumber ;
-        try {
-            idNumber= Integer.parseInt(id);
-        }
-        catch (Exception e) {
-            return new ResponseEntity<>(new DTOResponse<>(e.getMessage()),HttpStatus.BAD_REQUEST);
-        }
-        Business business = service.getBusinessProfile(idNumber);
+    public ResponseEntity<DTOResponse<Business>> getBusinessProfile(@PathVariable("id") int id) {
+
+        Business business = service.getBusinessProfile(id);
         if (business == null)
-            return responseFactory.notFound("business with id "+idNumber+" not found");
+            return responseFactory.notFound("business with id "+id+" not found");
         return ResponseEntity.ok(new DTOResponse<>(business));
+    }
+
+    @GetMapping("business/user")
+    public ResponseEntity<DTOResponse<Business>> getBusinessProfile(
+            HttpServletRequest request
+    ){
+        try {
+            Business business = service.getProfileFromRequestToken(request) ;
+            return responseFactory.response(business) ;
+        } catch (UserError e) {
+            return responseFactory.errorResponse(e) ;
+        } catch (Exception e) {
+            return responseFactory.errorResponse(e) ;
+        }
     }
 
     @PostMapping("/newprofile")
