@@ -87,7 +87,7 @@ public class SeekerController {
 
     @PostMapping("/seeker/apply")
     public ResponseEntity<DTOResponse<Seeker>> applyForJob(@RequestParam("jobId") int jobId,
-                     @RequestParam("indId") int indId){
+                     HttpServletRequest request){
         //get individual from token---
         PieceJob job = null ;
         try
@@ -100,10 +100,10 @@ public class SeekerController {
         }
         Seeker seeker = null ;
         try {
-            seeker = service.getSeeker(indId) ;
+            seeker = service.getProfileFromRequestToken(request) ;
         }
         catch (Exception ee){
-            System.out.println("seeker: "+indId+"error: "+ee.getMessage());
+            System.out.println("seeker: "+ee.getMessage());
             return responseFactory.errorResponse("Seeker Not Found",HttpStatus.NOT_FOUND);
         }
 
