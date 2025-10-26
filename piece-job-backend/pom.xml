@@ -117,6 +117,7 @@
                 </configuration>
             </plugin>
 		</plugins>
+        <finalName>piece-job-back-end</finalName>
 	</build>
 
 </project>
