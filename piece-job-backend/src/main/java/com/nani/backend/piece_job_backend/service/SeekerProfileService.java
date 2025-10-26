@@ -13,13 +13,11 @@ public class SeekerProfileService extends ProfileService{
 
     private final SkillService skillService;
     private final SeekerProfileRepo repo;
-    private final PieceJobApplicationService applicationsService;
 
-    public SeekerProfileService(JwtService jwtService, PJUserService userService, SkillService skillService, SeekerProfileRepo repo, PieceJobApplicationService applicationsService) {
+    public SeekerProfileService(JwtService jwtService, PJUserService userService, SkillService skillService, SeekerProfileRepo repo) {
         super(jwtService, userService);
         this.skillService = skillService;
         this.repo = repo;
-        this.applicationsService = applicationsService;
     }
 
     public Seeker saveSeekerProfile(Seeker seeker) {
@@ -48,13 +46,11 @@ public class SeekerProfileService extends ProfileService{
             throw new NotFoundError("Job cannot be null") ;
         }
         else{
-            PieceJobApplication application = applicationsService.apply(job,applicant) ;
-            //application
-            if (!job.applyForJob(application)){
+            if (!job.applyForJob(applicant)){
                 throw new UserError("Already applied for the job");
             }
             //user-has not already applied?
-            if (!applicant.canAppliedForJob(application)){
+            if (!applicant.canAppliedForJob(job)){
                 throw new UserError("Already applied for the job");
             }
             Seeker saved = repo.save(applicant) ;
