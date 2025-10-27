@@ -27,32 +27,32 @@ public abstract class Individual extends Profile{
             joinColumns = { @JoinColumn(name = "ind_id")},
             inverseJoinColumns = {@JoinColumn(name = "skill_id")})
     private List<Skill> skillSet = new ArrayList<>();
-    @ManyToMany
-    @JoinTable(name = "jobs_applied_by_individual",
-            joinColumns = { @JoinColumn(name = "ind_id")},
-            inverseJoinColumns = {@JoinColumn(name = "job_id")})
-    private List<PieceJob> jobsApplied = new ArrayList<>();
+    @OneToMany(mappedBy = "jobApplicant")
+//    @JoinTable(name = "jobs_applications_by_individual",
+//            joinColumns = { @JoinColumn(name = "ind_id")},
+//            inverseJoinColumns = {@JoinColumn(name = "job_id")})
+    private List<PieceJobApplication> jobsApplied = new ArrayList<>();
     @ManyToMany
     @JoinTable(name = "jobs_completed_by_individual",
             joinColumns = { @JoinColumn(name = "ind_id")},
             inverseJoinColumns = {@JoinColumn(name = "job_id")})
     private List<PieceJob> jobsCompleted = new ArrayList<>();
 
-    public boolean canAppliedForJob(PieceJob job){
-        if (job == null)
+    public boolean canAppliedForJob(PieceJobApplication jobApplication){
+        if (jobApplication == null)
             return false ;
 
         if (jobsApplied == null|| jobsApplied.isEmpty()){
             jobsApplied= new ArrayList<>();
-            jobsApplied.add(job) ;
+            jobsApplied.add(jobApplication) ;
             return true ;
         }
 
         boolean alreadyApplied = jobsApplied.stream().anyMatch(i->
-                i.getId() ==job.getId());
+                i.getId() ==jobApplication.getId());
         if(alreadyApplied)
             return false ;
-        jobsApplied.add(job) ;
+        jobsApplied.add(jobApplication) ;
         return true;
     }
 

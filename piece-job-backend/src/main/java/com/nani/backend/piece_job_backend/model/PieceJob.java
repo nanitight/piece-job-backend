@@ -40,8 +40,8 @@ public class PieceJob {
     @JsonIgnore
     private Business postedBy;
 
-    @ManyToMany(mappedBy = "jobsApplied")
-    private List<Individual> jobApplicants = new ArrayList<>();
+    @OneToMany(mappedBy = "jobPosted")
+    private List<PieceJobApplication> jobApplications = new ArrayList<>();
 
     public void updateToNewPieceJobInformation(PieceJob job) {
         this.title = job.getTitle() == null ? title : job.getTitle();
@@ -55,21 +55,21 @@ public class PieceJob {
         this.postedBy = job.getPostedBy() == null ? postedBy : job.getPostedBy();
     }
 
-    public boolean applyForJob(Individual applicant){
-        if (applicant == null)
+    public boolean applyForJob(PieceJobApplication application){
+        if (application == null)
             return false ;
 
-        if (jobApplicants == null|| jobApplicants.isEmpty()){
-            jobApplicants = new ArrayList<>();
-            jobApplicants.add(applicant) ;
+        if (jobApplications == null|| jobApplications.isEmpty()){
+            jobApplications = new ArrayList<>();
+            jobApplications.add(application) ;
             return true ;
         }
 
-        boolean alreadyApplied = jobApplicants.stream().anyMatch(i->
-                i.getId() == applicant.getId());
+        boolean alreadyApplied = jobApplications.stream().anyMatch(i->
+                i.getId() == application.getId());
         if(alreadyApplied)
             return false ;
-        jobApplicants.add(applicant) ;
+        jobApplications.add(application) ;
 //        applicant.applied(this);
         return true;
     }

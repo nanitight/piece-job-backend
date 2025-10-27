@@ -2,6 +2,7 @@ package com.nani.backend.piece_job_backend.dto;
 
 import com.nani.backend.piece_job_backend.model.Individual;
 import com.nani.backend.piece_job_backend.model.PieceJob;
+import com.nani.backend.piece_job_backend.model.PieceJobApplication;
 import lombok.Data;
 import lombok.Getter;
 
@@ -19,8 +20,8 @@ public class PieceJobApplicantsDTO extends PieceJobDTOBasic{
 
     private void extractApplicants(PieceJob job){
         List<IndividualDTO> applicants = new ArrayList<>() ;
-        for (Individual i : job.getJobApplicants())
-            applicants.add(new IndividualDTO(i)) ;
+        for (PieceJobApplication jobApplication : job.getJobApplications())
+            applicants.add(new IndividualDTO(jobApplication.getJobApplicant())) ;
         System.out.println("applicants: "+applicants);
         jobApplicants = applicants ;
     }
