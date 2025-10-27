@@ -55,7 +55,7 @@ public class SeekerServiceTests {
     }
 
     @Test
-    public void Seeker_ApplyingForAJob_AddsSeekerToApplicantsAndAddJobToJobsApplied(){
+    public void Seeker_ApplyingForAJob_AddsSeekersApplicationAndAddJobApplicationToJobsApplied_ApplicationMustHaveInv(){
         System.out.println("Job: "+job);
 
         try{
@@ -64,7 +64,7 @@ public class SeekerServiceTests {
 
             Seeker saved = service.applyForJob(seeker, job);
             Assertions.assertThat(saved.getJobsApplied().size()).isGreaterThan(0) ;
-            Assertions.assertThat(saved.getJobsApplied()).contains(job) ;
+            Assertions.assertThat(saved.getJobsApplied().get(0).getJobPosted()).isEqualTo(job) ;
 
         } catch (Exception e) {
             System.out.println(e.getMessage());

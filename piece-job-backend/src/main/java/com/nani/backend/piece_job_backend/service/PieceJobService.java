@@ -1,17 +1,14 @@
 package com.nani.backend.piece_job_backend.service;
 
-import com.nani.backend.piece_job_backend.dto.IndividualDTO;
-import com.nani.backend.piece_job_backend.dto.PieceJobApplicantsDTO;
+import com.nani.backend.piece_job_backend.dto.PieceJobApplicationsDTO;
 import com.nani.backend.piece_job_backend.model.Business;
 import com.nani.backend.piece_job_backend.model.Exceptions.NotFoundError;
 import com.nani.backend.piece_job_backend.model.Exceptions.UserError;
-import com.nani.backend.piece_job_backend.model.Individual;
 import com.nani.backend.piece_job_backend.model.PieceJob;
 import com.nani.backend.piece_job_backend.model.Skill;
 import com.nani.backend.piece_job_backend.repository.PieceJobRepo;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -61,13 +58,13 @@ public class PieceJobService {
         repo.deleteById(id);
     }
 
-    public PieceJobApplicantsDTO getApplicantsFromJob(int id) throws Exception{
+    public PieceJobApplicationsDTO getApplicantsFromJob(int id) throws Exception{
         PieceJob job = getJobById(id) ;
         if (job == null){
             System.out.println("job with id "+id+" is not found");
             throw new NotFoundError("job with id "+id+" is not found") ;
         }
-        return new PieceJobApplicantsDTO(job);
+        return new PieceJobApplicationsDTO(job);
 
     }
 }
