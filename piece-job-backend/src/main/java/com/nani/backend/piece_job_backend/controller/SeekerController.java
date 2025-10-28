@@ -1,6 +1,8 @@
 package com.nani.backend.piece_job_backend.controller;
 
 import com.nani.backend.piece_job_backend.dto.DTOResponse;
+import com.nani.backend.piece_job_backend.dto.IndividualDTO;
+import com.nani.backend.piece_job_backend.dto.IndividualSeekerDTO;
 import com.nani.backend.piece_job_backend.model.Business;
 import com.nani.backend.piece_job_backend.model.Exceptions.UserError;
 import com.nani.backend.piece_job_backend.model.PJUser;
@@ -73,9 +75,10 @@ public class SeekerController {
     }
 
     @GetMapping("/seeker/user")
-    public ResponseEntity<DTOResponse<Seeker>> getSeekerProfile(HttpServletRequest request){
+    public ResponseEntity<DTOResponse<IndividualSeekerDTO>> getSeekerProfile(HttpServletRequest request){
         try {
-            return responseFactory.response(service.getProfileFromRequestToken(request)) ;
+            return responseFactory.response( new IndividualSeekerDTO(
+                    service.getProfileFromRequestToken(request))) ;
         }
         catch (UserError e){
             return responseFactory.errorResponse(e) ;
@@ -86,8 +89,8 @@ public class SeekerController {
     }
 
     @PostMapping("/seeker/apply")
-    public ResponseEntity<DTOResponse<Seeker>> applyForJob(@RequestParam("jobId") int jobId,
-                     HttpServletRequest request){
+    public ResponseEntity<DTOResponse<IndividualSeekerDTO>> applyForJob(@RequestParam("jobId") int jobId,
+                                                                  HttpServletRequest request){
         //get individual from token---
         PieceJob job = null ;
         try
@@ -111,7 +114,7 @@ public class SeekerController {
             System.out.println("seeker: "+seeker+" job: "+job);
 
             Seeker updated = service.applyForJob(seeker,job) ;
-            return new ResponseEntity<DTOResponse<Seeker>>(new DTOResponse<>(updated),HttpStatus.OK) ;
+            return responseFactory.response(new IndividualSeekerDTO(updated));
         }
         catch (Exception e){
             return responseFactory.errorResponse(e);
@@ -121,7 +124,7 @@ public class SeekerController {
     }
 
     @PutMapping("/seeker/{id}")
-    public ResponseEntity<DTOResponse<Seeker>> updateSeekerProfile(
+    public ResponseEntity<DTOResponse<IndividualSeekerDTO>> updateSeekerProfile(
             @PathVariable("id") int id, @RequestBody Seeker seeker) {
 
         if (seeker == null) {
@@ -130,7 +133,7 @@ public class SeekerController {
         else{
             try {
                 return  new ResponseEntity<>(
-                        new DTOResponse<>(service.updateSeekerProfile(id,seeker)),
+                        new DTOResponse<>( new IndividualSeekerDTO(service.updateSeekerProfile(id,seeker))),
                         HttpStatus.OK);
             } catch (Exception e) {
                 return new ResponseEntity<>(new DTOResponse<>(e.getMessage()),HttpStatus.BAD_REQUEST);

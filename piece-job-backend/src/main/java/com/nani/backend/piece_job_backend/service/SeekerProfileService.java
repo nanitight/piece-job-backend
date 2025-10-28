@@ -50,13 +50,15 @@ public class SeekerProfileService extends ProfileService{
         else{
             PieceJobApplication application = applicationsService.apply(job,applicant) ;
             //application
-            if (!job.applyForJob(application)){
-                throw new UserError("Already applied for the job");
-            }
+            job.applyForJob(application);
+//            if (!job.applyForJob(application)){
+//                throw new UserError("Already applied for the job");
+//            }
             //user-has not already applied?
-            if (!applicant.canAppliedForJob(application)){
-                throw new UserError("Already applied for the job");
-            }
+            applicant.canAppliedForJob(application);
+//            if (!applicant.canAppliedForJob(application)){
+//                throw new UserError("Already applied for the job");
+//            }
             Seeker saved = repo.save(applicant) ;
             return saved ;
 

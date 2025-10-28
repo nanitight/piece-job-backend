@@ -52,7 +52,7 @@ public class PJUserController {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 //        String token = service.verifyUser(new PJUser(savedUSer.getId(), pjUser.getUsername(),pjUser.getPassword()));
             String token = service.verifyUser(new PJUser(savedUSer.getUsername(), password)) ;
-            PJUserDTO userRegistering = new PJUserDTO(savedUSer.getUsername(), token);
+            PJUserDTO userRegistering = new PJUserDTO(savedUSer, token);
 
             return responseFactory.response(userRegistering) ;
         }
