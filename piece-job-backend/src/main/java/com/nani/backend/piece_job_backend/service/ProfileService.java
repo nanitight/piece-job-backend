@@ -28,7 +28,7 @@ public abstract class ProfileService {
         return userService.getUserFromToken(token);
     }
 
-    protected PJUser getUserFromRequest(HttpServletRequest request) throws Exception{
+    protected PJUser getUserFromRequest(HttpServletRequest request) throws NotFoundError{
         PJUser user = getUserFromToken(getToken(request)) ;
         if (user == null){
             throw new NotFoundError("no user found") ;

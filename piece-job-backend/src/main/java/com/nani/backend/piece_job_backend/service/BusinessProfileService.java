@@ -63,7 +63,7 @@ public class BusinessProfileService extends ProfileService{
         }
     }
 
-    public Business getBusinessProfileFromUserId(int id) throws UserError {
+    public Business getBusinessProfileFromUserId(int id) throws NotFoundError {
         String notFoundMsg = "logged in user has no business profile" ;
         return repo.getBusinessProfileFromUserId(id)
                 .orElseThrow(()->new NotFoundError(notFoundMsg));
@@ -78,7 +78,7 @@ public class BusinessProfileService extends ProfileService{
         try {
             return getBusinessProfileFromUserId(user.getId());
         }
-        catch (UserError e){
+        catch (NotFoundError e){
             throw e ;
         }
         catch (Exception e) {
