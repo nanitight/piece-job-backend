@@ -5,6 +5,7 @@ import com.nani.backend.piece_job_backend.model.Business;
 import com.nani.backend.piece_job_backend.model.Exceptions.NotFoundError;
 import com.nani.backend.piece_job_backend.model.Exceptions.UserError;
 import com.nani.backend.piece_job_backend.model.PieceJob;
+import com.nani.backend.piece_job_backend.model.PieceJobApplication;
 import com.nani.backend.piece_job_backend.model.Skill;
 import com.nani.backend.piece_job_backend.repository.PieceJobRepo;
 import org.springframework.stereotype.Service;
@@ -15,10 +16,13 @@ import java.util.List;
 public class PieceJobService {
     PieceJobRepo repo ;
     SkillService skillService ;
+    PieceJobApplicationService applicationService;
 
-    public PieceJobService(PieceJobRepo repo, SkillService skillService) {
+    public PieceJobService(PieceJobRepo repo, SkillService skillService,
+                           PieceJobApplicationService applicationService) {
         this.repo = repo;
         this.skillService = skillService;
+        this.applicationService = applicationService;
     }
 
     public List<PieceJob> getJobs(){
@@ -54,7 +58,18 @@ public class PieceJobService {
         return exists;
     }
 
-    public void deleteAJob(int id) {
+    public void deleteAJob(int id) throws NotFoundError {
+        PieceJob job = repo.findById(id).orElse(null) ;
+        if (job == null)
+            throw new NotFoundError("Job with id "+id+ " not found") ;
+
+        if (job.getJobApplications() != null && !job.getJobApplications().isEmpty()){
+            for (PieceJobApplication s : job.getJobApplications()){
+                s.setJobPosted(null);
+//                applicationService.deleteApplication(s.getId());
+            }
+        }
+
         repo.deleteById(id);
     }
 

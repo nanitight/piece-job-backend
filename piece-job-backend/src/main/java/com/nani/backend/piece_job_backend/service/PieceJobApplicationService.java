@@ -26,4 +26,16 @@ public class PieceJobApplicationService {
         application.applyNow(job,seeker);
         return repo.save(application) ;
     }
+
+    public void deleteApplication(int id){
+        PieceJobApplication application = repo.findById(id).orElse(null) ;
+        if (application == null) {
+            return;
+        }
+        application.setJobPosted(null);
+        application.setJobApplicant(null);
+
+        repo.deleteById(id);
+
+    }
 }

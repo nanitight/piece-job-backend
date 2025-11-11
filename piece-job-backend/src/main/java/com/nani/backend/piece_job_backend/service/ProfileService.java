@@ -28,8 +28,13 @@ public abstract class ProfileService {
         return userService.getUserFromToken(token);
     }
 
-    protected PJUser getUserFromRequest(HttpServletRequest request) throws NotFoundError{
-        PJUser user = getUserFromToken(getToken(request)) ;
+    protected PJUser getUserFromRequest(HttpServletRequest request) throws UserError{
+        PJUser user = null;
+        try {
+            user = getUserFromToken(getToken(request));
+        } catch (Exception e) {
+            throw new UserError("No user found from request token");
+        }
         if (user == null){
             throw new NotFoundError("no user found") ;
         }
