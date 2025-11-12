@@ -33,7 +33,7 @@ public class PieceJobApplicationService {
             return;
         }
         application.setJobPosted(null);
-        application.setJobApplicant(null);
+        application.setJobApplicant(null); //send notification of job unavailable
 
         repo.deleteById(id);
 

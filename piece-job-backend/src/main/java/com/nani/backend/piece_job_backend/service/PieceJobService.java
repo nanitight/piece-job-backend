@@ -65,8 +65,8 @@ public class PieceJobService {
 
         if (job.getJobApplications() != null && !job.getJobApplications().isEmpty()){
             for (PieceJobApplication s : job.getJobApplications()){
-                s.setJobPosted(null);
-//                applicationService.deleteApplication(s.getId());
+//                s.setJobPosted(null);
+                applicationService.deleteApplication(s.getId());
             }
         }
 

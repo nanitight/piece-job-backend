@@ -4,7 +4,7 @@ COPY pom.xml .
 COPY src ./src
 RUN mvn clean package -DskipTests
 
-FROM openjdk:24-jdk-slim
+FROM eclipse-temurin:25-jdk
 WORKDIR /app
 EXPOSE 8080
 COPY --from=build /app/target/*.jar piece-job-back-end.jar
