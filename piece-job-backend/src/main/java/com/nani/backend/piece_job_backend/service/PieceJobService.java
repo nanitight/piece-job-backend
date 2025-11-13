@@ -65,15 +65,18 @@ public class PieceJobService {
 
         if (job.getJobApplications() != null && !job.getJobApplications().isEmpty()){
             for (PieceJobApplication s : job.getJobApplications()){
-//                s.setJobPosted(null);
-                applicationService.deleteApplication(s.getId());
+                try {
+                    applicationService.deleteApplication(s.getId());
+                } catch (NotFoundError _) {
+                    System.out.println("Tried deleting job application, but didn't find, id: "+s.getId());
+                }
             }
         }
 
         repo.deleteById(id);
     }
 
-    public PieceJobApplicationsDTO getApplicantsFromJob(int id) throws Exception{
+    public PieceJobApplicationsDTO getApplicantsFromJob(int id) throws NotFoundError{
         PieceJob job = getJobById(id) ;
         if (job == null){
             System.out.println("job with id "+id+" is not found");

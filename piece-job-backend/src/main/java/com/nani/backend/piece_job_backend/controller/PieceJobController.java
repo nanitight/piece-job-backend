@@ -74,7 +74,7 @@ public class PieceJobController {
         try{
             return responseFactory.response(jobService.getApplicantsFromJob(id));
         }
-        catch (UserError e){
+        catch (NotFoundError e){
             return responseFactory.errorResponse(e) ;
         }
         catch (Exception e){

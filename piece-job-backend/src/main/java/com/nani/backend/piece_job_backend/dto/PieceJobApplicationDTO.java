@@ -6,6 +6,7 @@ import lombok.ToString;
 
 import java.util.Date;
 
+@ToString
 @Data
 public class PieceJobApplicationDTO{
     private IndividualDTO jobApplicant ;

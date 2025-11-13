@@ -69,7 +69,7 @@ public class SeekerController {
             @PathVariable("username") String username) {
         Seeker seeker = service.getSeekerFromUsername(username) ;
         if (seeker == null){
-            return responseFactory.notFound("seeker with id "+username+" not found");
+            return responseFactory.notFound("seeker with username "+username+" not found");
         }
         return ResponseEntity.ok(new DTOResponse<>(seeker)) ;
     }
