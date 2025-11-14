@@ -18,7 +18,7 @@ import java.util.List;
         generator = ObjectIdGenerators.PropertyGenerator.class,
         property = "id"
 )
-@ToString(exclude = {"postedBy"})
+@ToString(exclude = {"postedBy","jobApplications"})
 @Builder
 public class PieceJob {
     @Id

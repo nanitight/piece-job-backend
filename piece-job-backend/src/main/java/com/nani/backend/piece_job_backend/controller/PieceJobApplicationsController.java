@@ -17,9 +17,9 @@ import java.util.List;
 public class PieceJobApplicationsController {
     private final PieceJobApplicationService service ;
 
-    @PostMapping("/jobApplication/accept")//?appId=
+    @PutMapping("/jobApplication/{appId}/accept")//?appId=
     public ResponseEntity<DTOResponse<PieceJobApplicationDTO>> acceptJobApplicant(
-            @RequestParam("appId") int applicationId
+            @PathVariable("appId") int applicationId
     ) {
         try {
             PieceJobApplication application =  service.updateStatusToAccept(applicationId);
@@ -32,9 +32,9 @@ public class PieceJobApplicationsController {
         }
     }
 
-    @PostMapping("/jobApplication/reject")//?appId=
+    @PutMapping("/jobApplication/{appId}/reject")//?appId=
     public ResponseEntity<DTOResponse<PieceJobApplicationDTO>> rejectJobApplicant(
-            @RequestParam("appId") int applicationId
+            @PathVariable("appId") int applicationId
     ) {
         try {
             PieceJobApplication application =  service.updateStatusToReject(applicationId);
