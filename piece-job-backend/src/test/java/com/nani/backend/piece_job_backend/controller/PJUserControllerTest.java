@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nani.backend.piece_job_backend.model.PJUser;
 import com.nani.backend.piece_job_backend.service.JwtService;
 import com.nani.backend.piece_job_backend.service.PJUserService;
+import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,10 +19,16 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.util.Arrays;
+import java.util.List;
+
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 @WebMvcTest(controllers = PJUserController.class)
 @AutoConfigureMockMvc(addFilters = false)
@@ -61,7 +68,26 @@ public class PJUserControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(user))) ;
 
-        response.andExpect(MockMvcResultMatchers.status().isOk());
+        response.andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.username",
+                        CoreMatchers.is(user.getUsername()))) ;
+//                .andDo(MockMvcResultHandlers.print()) ;
 
+    }
+
+    @Test
+    public void PJUserController_GetAllUsers_ReturnListDTOUsers() throws Exception {
+        List<PJUser> usersList = Arrays.asList(user,user) ;
+        when(service.getAllUser()).thenReturn(usersList) ;
+
+        ResultActions res = mockMvc.perform(get("/users")
+//                .param("p1","1")
+//                .param("p2","10")
+                        .contentType(MediaType.APPLICATION_JSON)
+        );
+
+        res.andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.size()",
+                        CoreMatchers.is(usersList.size()))) ;
     }
 }
